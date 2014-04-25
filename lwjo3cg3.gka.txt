@@ -1,0 +1,28 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+#
+# Initial commit
+#
+# Changes to be committed:
+#   (use "git rm --cached <file>..." to unstage)
+#
+#	new file:   .gitattributes
+#	new file:   .gitignore
+#	new file:   App.config
+#	new file:   Datacadia.csproj
+#	new file:   Datacadia/.gitattributes
+#	new file:   Datacadia/.gitignore
+#	new file:   Program.cs
+#	new file:   Properties/AssemblyInfo.cs
+#	new file:   Properties/Resources.Designer.cs
+#	new file:   Properties/Resources.resx
+#	new file:   Properties/Settings.Designer.cs
+#	new file:   Properties/Settings.settings
+#	new file:   datacadia.Designer.cs
+#	new file:   datacadia.cs
+#	new file:   datacadia.resx
+#	new file:   dbHandle.cs
+#
+
