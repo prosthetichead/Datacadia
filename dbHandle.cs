@@ -60,7 +60,6 @@ namespace Datacadia
                 System.Windows.Forms.MessageBox.Show(e.Message);
                 //conn.Close();
                 return ds;
-
             }
         }
 
@@ -128,6 +127,22 @@ namespace Datacadia
                 System.Windows.Forms.MessageBox.Show(e.Message + "\n" + command.CommandText);
             }
 
+        }
+
+        public void SaveDataTable(DataTable DT)
+        {
+            try
+            {
+                var command = conn.CreateCommand();
+                command.CommandText = string.Format("SELECT * FROM {0}", DT.TableName);
+                var adapter = new SQLiteDataAdapter(command);
+                SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adapter);
+                adapter.Update(DT);
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message);
+            }
         }
     }
 }

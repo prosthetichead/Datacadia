@@ -31,7 +31,46 @@ namespace Datacadia
             db = new dbHandle();
             tabPlatforms.Enabled = false;
             tabGames.Enabled = false;
+            tabGenre.Enabled = false;
         }
+
+
+        public void updateInfoBox(string text, Color colour)
+        {
+            infoBox.AppendText(text + "\n", colour);
+        }
+        public void refreshAllDataSets()
+        {
+            // fill in details of genres
+            DataSet dsGenres = db.getDataSet("select id, genre_name from genres order by genre_name");
+            comboBoxGenres.ComboBox.DisplayMember = "genre_name";
+            comboBoxGenres.ComboBox.ValueMember = "id";
+            comboBoxGenres.ComboBox.DataSource = dsGenres.Tables[0];
+
+            refreshPlatformsDataSet();
+            refreshGamesDataSet();
+        }
+        public void refreshGamesDataSet()
+        {
+            // fill in details of games tab
+            gameDataSet = db.getDataSet("select games.active, games.name, games.file_name, games.region, genres.genre_name as genre, games.clone_of as clone from games, genres where games.genre_id = genres.id and platform_id = " + listboxPlatforms.SelectedValue);
+            dataGridGames.DataSource = gameDataSet.Tables[0].DefaultView;
+        }
+        public void refreshPlatformsDataSet()
+        {
+            // Set up platforms dropdown.
+            DataSet ds;
+            if (cboxOnlyActive.Checked)
+                ds = db.getDataSet("select id, name from platforms where active = 1 order by name");
+            else
+                ds = db.getDataSet("select id, name from platforms order by name");
+
+            listboxPlatforms.DisplayMember = "name";
+            listboxPlatforms.ValueMember = "id";
+            listboxPlatforms.DataSource = ds.Tables[0];
+        }
+
+
 
         private void dbConnect_Click(object sender, EventArgs e)
         {
@@ -44,22 +83,20 @@ namespace Datacadia
 
                 arcadiaPath = Path.GetDirectoryName(txtArcadiaEXEpath.Text);
                 
-                // Set up platforms dropdown.
-                 DataSet ds = db.getDataSet("select id, name from platforms order by name");
-                listboxPlatforms.DisplayMember = "name";
-                listboxPlatforms.ValueMember = "id";
-                listboxPlatforms.DataSource = ds.Tables[0];
+
 
                 infoBox.AppendText("Connected to Arcadia Database \n", Color.LavenderBlush);
 
                 tabPlatforms.Enabled = true;
                 tabGames.Enabled = true;
+                cboxOnlyActive.Enabled = true;
 
-
+                refreshAllDataSets();
             }
             else
                 System.Windows.Forms.MessageBox.Show("Cant find file");
         }
+
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
@@ -183,7 +220,7 @@ namespace Datacadia
                 infoBox.AppendText("\n No-Intro XML Load Completed \n");
                 infoBox.AppendText("  " + countInserted + " Item(s) Inserted : " + countUpdated + " Item(s) Updated : " + countSkiped + " Item(s) Skipped \n", Color.LemonChiffon);
                 infoBox.gotToBottom();
-                
+                refreshGamesDataSet();                
             }
         }
 
@@ -265,7 +302,7 @@ namespace Datacadia
                     {
                         if (cboxXMLInsert.Checked == true)
                         {
-                            var command = new SQLiteCommand("INSERT INTO games (crc, platform_id, name, developer, file_name, release_year, genre_id, rating) VALUES (@game_id, @crc, @platform_id, @name, @manufacturer, @file_name, @year, @genre_id, @rating)");
+                            var command = new SQLiteCommand("INSERT INTO games (crc, platform_id, name, developer, file_name, release_year, genre_id, rating, region) VALUES (@crc, @platform_id, @name, @manufacturer, @file_name, @year, @genre_id, @rating, @region)");
                             command.Parameters.AddWithValue("@crc", crc);
                             command.Parameters.AddWithValue("@name", name);
                             command.Parameters.AddWithValue("@manufacturer", manufacturer);
@@ -274,6 +311,7 @@ namespace Datacadia
                             command.Parameters.AddWithValue("@rating", rating);
                             command.Parameters.AddWithValue("@platform_id", platform_id);
                             command.Parameters.AddWithValue("@file_name", file_name);
+                            command.Parameters.AddWithValue("@region", "NULL");
                             db.sqlExecute(command);
                             
                             infoBox.AppendText("\n  Inserted \n", Color.GreenYellow);
@@ -291,32 +329,11 @@ namespace Datacadia
                 infoBox.AppendText("\n\nHyperspin XML Load Completed \n");
                 infoBox.AppendText("  " + countInserted + " Item(s) Inserted : " + countUpdated + " Item(s) Updated : " + countSkiped + " Item(s) Skipped \n", Color.LemonChiffon);
                 infoBox.gotToBottom();
+                refreshGamesDataSet();
             }
         }
 
-        private void btnPlatformSave_Click(object sender, EventArgs e)
-        {
-            var command = new SQLiteCommand("update platforms set load_string = @load_string, roms_path = @roms_path, videos_path = @videos_path, images_path = @images_path, extension = @extension, active = @active where id = @platform_id");
-            command.Parameters.AddWithValue("@load_string", txtLoadString.Text);
-            command.Parameters.AddWithValue("@roms_path", txtRomsPath.Text);
-            command.Parameters.AddWithValue("@videos_path", txtVideosPath.Text);
-            command.Parameters.AddWithValue("@images_path", txtImagesPath.Text);
-            command.Parameters.AddWithValue("@extension", txtExtensions.Text);
-            if(cboxActive.Checked)
-                command.Parameters.AddWithValue("@active", 1);
-            else
-                command.Parameters.AddWithValue("@active", 0);
 
-            command.Parameters.AddWithValue("@platform_id", platform_id);
-
-            db.sqlExecute(command);
-
-            btnPlatformSave.Text = "Saved";
-            btnPlatformSave.Enabled = false;
-
-            infoBox.AppendText(listboxPlatforms.Text, Color.WhiteSmoke);
-            infoBox.AppendText("\n Changes Saved \n", Color.GreenYellow);
-        }
 
         private void txtLoadString_TextChanged(object sender, EventArgs e)
         {
@@ -386,13 +403,13 @@ namespace Datacadia
             progressBar.Value = 0;
             infoBox.AppendText("\n\nRom Activation Complete\n");
             infoBox.gotToBottom();
+            refreshGamesDataSet();
         }
 
         private void listboxPlatforms_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Fill in details on platform Tab
-            DataSet ds = db.getDataSet("select * from platforms where id = " + listboxPlatforms.SelectedValue);
-            
+            DataSet ds = db.getDataSet("select * from platforms where id = " + listboxPlatforms.SelectedValue);            
             platform_id = listboxPlatforms.SelectedValue as long?;
 
             cboxActive.Checked = ds.Tables[0].Rows[0].Field<bool>("active");
@@ -402,11 +419,7 @@ namespace Datacadia
             txtImagesPath.Text = ds.Tables[0].Rows[0].Field<string>("images_path");
             txtExtensions.Text = ds.Tables[0].Rows[0].Field<string>("extension");
 
-            // fill in details of games tab
-            gameDataSet = db.getDataSet("select games.active, games.name, games.file_name, games.region, genres.genre_name as genre, games.clone_of as clone from games, genres where games.genre_id = genres.id and platform_id = " + listboxPlatforms.SelectedValue);
-            dataGridGames.DataSource = gameDataSet.Tables[0].DefaultView;
-
-
+            refreshGamesDataSet();
 
         }
 
@@ -429,6 +442,82 @@ namespace Datacadia
                 }
             }
         }
+
+
+        /* --Genre Tab
+         * combobox Genres Changed
+         */
+        private void comboBoxGenres_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Get dataset for selected genre
+            long? genre_id = comboBoxGenres.ComboBox.SelectedValue as long?;
+            DataSet ds = db.getDataSet("select * from genres where id = " + comboBoxGenres.ComboBox.SelectedValue);
+
+            // set txtAltGenre text
+            txtAltGenreNames.Text = ds.Tables[0].Rows[0].Field<string>("alt_names");
+
+        }
+        /* --Genre Tab
+        * Save Button Clicked
+        */
+        private void btnSaveGenre_Click(object sender, EventArgs e)
+        {
+            long? genre_id = comboBoxGenres.ComboBox.SelectedValue as long?;
+
+            var command = new SQLiteCommand("update genres set alt_names = @alt_names where id = @genre_id");
+            command.Parameters.AddWithValue("@alt_names", txtAltGenreNames.Text);
+            command.Parameters.AddWithValue("@genre_id", genre_id);
+
+            db.sqlExecute(command);
+            infoBox.AppendText("\ngenre "+ comboBoxGenres.ComboBox.Text + " updated \n");
+            infoBox.gotToBottom();
+        }
+
+        private void btnClearPlatform_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete all "+ listboxPlatforms.Text + " game data from the database?", "Confirmation", MessageBoxButtons.YesNo);
+            if(result == DialogResult.Yes)
+            {
+                var command = new SQLiteCommand("delete from games where platform_id = @platform_id");
+                command.Parameters.AddWithValue("@platform_id", platform_id);
+                db.sqlExecute(command);
+
+                infoBox.AppendText("\nAll " + listboxPlatforms.Text + " game data has been removed from the database \n");
+                infoBox.gotToBottom();
+
+                refreshGamesDataSet();
+            }
+        }
+
+        private void btnPlatformsSave_Click(object sender, EventArgs e)
+        {
+            var command = new SQLiteCommand("update platforms set load_string = @load_string, roms_path = @roms_path, videos_path = @videos_path, images_path = @images_path, extension = @extension, active = @active where id = @platform_id");
+            command.Parameters.AddWithValue("@load_string", txtLoadString.Text);
+            command.Parameters.AddWithValue("@roms_path", txtRomsPath.Text);
+            command.Parameters.AddWithValue("@videos_path", txtVideosPath.Text);
+            command.Parameters.AddWithValue("@images_path", txtImagesPath.Text);
+            command.Parameters.AddWithValue("@extension", txtExtensions.Text);
+            if (cboxActive.Checked)
+                command.Parameters.AddWithValue("@active", 1);
+            else
+                command.Parameters.AddWithValue("@active", 0);
+
+            command.Parameters.AddWithValue("@platform_id", platform_id);
+
+            db.sqlExecute(command);
+
+            btnPlatformSave.Text = "Saved";
+            btnPlatformSave.Enabled = false;
+
+            infoBox.AppendText(listboxPlatforms.Text, Color.WhiteSmoke);
+            infoBox.AppendText("\n Changes Saved \n", Color.GreenYellow);
+        }
+
+        private void cboxOnlyActive_CheckedChanged(object sender, EventArgs e)
+        {
+            refreshPlatformsDataSet();
+        }
+
 
 
     }
