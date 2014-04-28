@@ -129,15 +129,15 @@ namespace Datacadia
 
         }
 
-        public void SaveDataTable(DataTable DT)
+        public void SaveDataTable(DataSet DS, string table_name)
         {
             try
             {
                 var command = conn.CreateCommand();
-                command.CommandText = string.Format("SELECT * FROM {0}", DT.TableName);
+                command.CommandText = string.Format("SELECT * FROM {0}", table_name);
                 var adapter = new SQLiteDataAdapter(command);
                 SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adapter);
-                adapter.Update(DT);
+                adapter.Update(DS.GetChanges());
             }
             catch (Exception e)
             {

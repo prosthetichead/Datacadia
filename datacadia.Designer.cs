@@ -42,6 +42,8 @@
             this.txtLoadString = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cboxPlatformIcon = new System.Windows.Forms.ComboBox();
             this.txtEmuPath = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,22 +55,24 @@
             this.cboxActive = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtRomsPath = new System.Windows.Forms.TextBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripPlatforms = new System.Windows.Forms.ToolStrip();
             this.toolStripLabelPlatforms = new System.Windows.Forms.ToolStripLabel();
             this.btnPlatformsSave = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.btnClearPlatform = new System.Windows.Forms.Button();
-            this.btnPlatformSave = new System.Windows.Forms.Button();
             this.tabGames = new System.Windows.Forms.TabPage();
+            this.panel8 = new System.Windows.Forms.Panel();
             this.dataGridGames = new System.Windows.Forms.DataGridView();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.panel7 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
-            this.btnActivateAvalableRoms = new System.Windows.Forms.Button();
-            this.btnLoadFromHyperSpin = new System.Windows.Forms.Button();
-            this.cboxXMLUpdate = new System.Windows.Forms.CheckBox();
             this.cboxXMLInsert = new System.Windows.Forms.CheckBox();
+            this.cboxXMLUpdate = new System.Windows.Forms.CheckBox();
+            this.btnLoadFromHyperSpin = new System.Windows.Forms.Button();
             this.btnLoadFromNoIntro = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnGamesSave = new System.Windows.Forms.ToolStripButton();
+            this.btnCheckAvalableRoms = new System.Windows.Forms.ToolStripButton();
             this.tabGenre = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -76,12 +80,18 @@
             this.toolStripGenre = new System.Windows.Forms.ToolStrip();
             this.comboBoxGenres = new System.Windows.Forms.ToolStripComboBox();
             this.btnSaveGenre = new System.Windows.Forms.ToolStripButton();
+            this.tabIcons = new System.Windows.Forms.TabPage();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.dataGridAssets = new System.Windows.Forms.DataGridView();
+            this.toolStripAssets = new System.Windows.Forms.ToolStrip();
+            this.btnAssetsSave = new System.Windows.Forms.ToolStripButton();
+            this.btnAssetsRefresh = new System.Windows.Forms.ToolStripButton();
             this.infoBox = new System.Windows.Forms.RichTextBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listboxPlatforms = new System.Windows.Forms.ListBox();
             this.splitter2 = new System.Windows.Forms.Splitter();
@@ -95,15 +105,21 @@
             this.tabPlatforms.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStripPlatforms.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tabGames.SuspendLayout();
+            this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridGames)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.panel7.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.tabGenre.SuspendLayout();
             this.toolStripGenre.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.tabIcons.SuspendLayout();
+            this.panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridAssets)).BeginInit();
+            this.toolStripAssets.SuspendLayout();
+            this.statusStrip.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -115,12 +131,12 @@
             this.tabControl1.Controls.Add(this.tabPlatforms);
             this.tabControl1.Controls.Add(this.tabGames);
             this.tabControl1.Controls.Add(this.tabGenre);
+            this.tabControl1.Controls.Add(this.tabIcons);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.ImeMode = System.Windows.Forms.ImeMode.AlphaFull;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(1);
             this.tabControl1.Name = "tabControl1";
-            this.tabControl1.Padding = new System.Drawing.Point(2, 3);
+            this.tabControl1.Padding = new System.Drawing.Point(5, 5);
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(729, 499);
             this.tabControl1.TabIndex = 1;
@@ -134,10 +150,10 @@
             this.tabConnection.Controls.Add(this.btnBrowseDB);
             this.tabConnection.Controls.Add(this.dbConnect);
             this.tabConnection.Controls.Add(this.dbLocation);
-            this.tabConnection.Location = new System.Drawing.Point(4, 22);
+            this.tabConnection.Location = new System.Drawing.Point(4, 26);
             this.tabConnection.Name = "tabConnection";
             this.tabConnection.Padding = new System.Windows.Forms.Padding(1);
-            this.tabConnection.Size = new System.Drawing.Size(721, 473);
+            this.tabConnection.Size = new System.Drawing.Size(721, 469);
             this.tabConnection.TabIndex = 0;
             this.tabConnection.Text = "Connection";
             // 
@@ -145,7 +161,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(264, 200);
+            this.label10.Location = new System.Drawing.Point(281, 215);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(129, 24);
             this.label10.TabIndex = 6;
@@ -214,15 +230,14 @@
             // 
             this.tabPlatforms.Controls.Add(this.panel2);
             this.tabPlatforms.Controls.Add(this.panel3);
-            this.tabPlatforms.Controls.Add(this.toolStrip1);
+            this.tabPlatforms.Controls.Add(this.toolStripPlatforms);
             this.tabPlatforms.Controls.Add(this.panel1);
-            this.tabPlatforms.Controls.Add(this.btnPlatformSave);
-            this.tabPlatforms.Location = new System.Drawing.Point(4, 22);
+            this.tabPlatforms.Location = new System.Drawing.Point(4, 26);
             this.tabPlatforms.Name = "tabPlatforms";
             this.tabPlatforms.Padding = new System.Windows.Forms.Padding(1);
-            this.tabPlatforms.Size = new System.Drawing.Size(721, 473);
+            this.tabPlatforms.Size = new System.Drawing.Size(721, 469);
             this.tabPlatforms.TabIndex = 1;
-            this.tabPlatforms.Text = "Platforms";
+            this.tabPlatforms.Text = "Platform Settings";
             this.tabPlatforms.UseVisualStyleBackColor = true;
             // 
             // panel2
@@ -259,6 +274,8 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.label12);
+            this.panel3.Controls.Add(this.cboxPlatformIcon);
             this.panel3.Controls.Add(this.txtEmuPath);
             this.panel3.Controls.Add(this.label9);
             this.panel3.Controls.Add(this.label5);
@@ -275,6 +292,25 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(719, 183);
             this.panel3.TabIndex = 29;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(449, 39);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(59, 13);
+            this.label12.TabIndex = 28;
+            this.label12.Text = "Icon Asset";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cboxPlatformIcon
+            // 
+            this.cboxPlatformIcon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboxPlatformIcon.FormattingEnabled = true;
+            this.cboxPlatformIcon.Location = new System.Drawing.Point(510, 36);
+            this.cboxPlatformIcon.Name = "cboxPlatformIcon";
+            this.cboxPlatformIcon.Size = new System.Drawing.Size(184, 21);
+            this.cboxPlatformIcon.TabIndex = 27;
             // 
             // txtEmuPath
             // 
@@ -309,7 +345,6 @@
             this.txtImagesPath.Name = "txtImagesPath";
             this.txtImagesPath.Size = new System.Drawing.Size(285, 22);
             this.txtImagesPath.TabIndex = 9;
-            this.txtImagesPath.TextChanged += new System.EventHandler(this.txtImagesPath_TextChanged);
             // 
             // label4
             // 
@@ -337,7 +372,6 @@
             this.txtVideosPath.Name = "txtVideosPath";
             this.txtVideosPath.Size = new System.Drawing.Size(285, 22);
             this.txtVideosPath.TabIndex = 7;
-            this.txtVideosPath.TextChanged += new System.EventHandler(this.txtVideosPath_TextChanged);
             // 
             // txtExtensions
             // 
@@ -345,7 +379,6 @@
             this.txtExtensions.Name = "txtExtensions";
             this.txtExtensions.Size = new System.Drawing.Size(285, 22);
             this.txtExtensions.TabIndex = 11;
-            this.txtExtensions.TextChanged += new System.EventHandler(this.txtExtensions_TextChanged);
             // 
             // cboxActive
             // 
@@ -356,7 +389,6 @@
             this.cboxActive.TabIndex = 2;
             this.cboxActive.Text = "active";
             this.cboxActive.UseVisualStyleBackColor = true;
-            this.cboxActive.CheckedChanged += new System.EventHandler(this.cboxActive_CheckedChanged);
             // 
             // label3
             // 
@@ -374,18 +406,17 @@
             this.txtRomsPath.Name = "txtRomsPath";
             this.txtRomsPath.Size = new System.Drawing.Size(285, 22);
             this.txtRomsPath.TabIndex = 5;
-            this.txtRomsPath.TextChanged += new System.EventHandler(this.txtRomsPath_TextChanged);
             // 
-            // toolStrip1
+            // toolStripPlatforms
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripPlatforms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabelPlatforms,
             this.btnPlatformsSave});
-            this.toolStrip1.Location = new System.Drawing.Point(1, 1);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(719, 25);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripPlatforms.Location = new System.Drawing.Point(1, 1);
+            this.toolStripPlatforms.Name = "toolStripPlatforms";
+            this.toolStripPlatforms.Size = new System.Drawing.Size(719, 25);
+            this.toolStripPlatforms.TabIndex = 1;
+            this.toolStripPlatforms.Text = "toolStrip1";
             // 
             // toolStripLabelPlatforms
             // 
@@ -403,10 +434,11 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.IndianRed;
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.btnClearPlatform);
-            this.panel1.Location = new System.Drawing.Point(511, 425);
+            this.panel1.Location = new System.Drawing.Point(534, 418);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(184, 46);
             this.panel1.TabIndex = 15;
@@ -432,87 +464,92 @@
             this.btnClearPlatform.UseVisualStyleBackColor = true;
             this.btnClearPlatform.Click += new System.EventHandler(this.btnClearPlatform_Click);
             // 
-            // btnPlatformSave
-            // 
-            this.btnPlatformSave.Location = new System.Drawing.Point(25, 379);
-            this.btnPlatformSave.Name = "btnPlatformSave";
-            this.btnPlatformSave.Size = new System.Drawing.Size(116, 23);
-            this.btnPlatformSave.TabIndex = 23;
-            this.btnPlatformSave.Text = "Save Changes";
-            this.btnPlatformSave.UseVisualStyleBackColor = true;
-            // 
             // tabGames
             // 
-            this.tabGames.Controls.Add(this.dataGridGames);
-            this.tabGames.Controls.Add(this.groupBox1);
-            this.tabGames.Location = new System.Drawing.Point(4, 22);
+            this.tabGames.Controls.Add(this.panel8);
+            this.tabGames.Controls.Add(this.panel7);
+            this.tabGames.Controls.Add(this.toolStrip1);
+            this.tabGames.Location = new System.Drawing.Point(4, 26);
             this.tabGames.Name = "tabGames";
             this.tabGames.Padding = new System.Windows.Forms.Padding(1);
-            this.tabGames.Size = new System.Drawing.Size(721, 473);
+            this.tabGames.Size = new System.Drawing.Size(721, 469);
             this.tabGames.TabIndex = 2;
             this.tabGames.Text = "Games";
             this.tabGames.UseVisualStyleBackColor = true;
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.dataGridGames);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel8.Location = new System.Drawing.Point(1, 75);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(719, 393);
+            this.panel8.TabIndex = 25;
             // 
             // dataGridGames
             // 
             this.dataGridGames.AllowUserToAddRows = false;
             this.dataGridGames.AllowUserToDeleteRows = false;
+            this.dataGridGames.AllowUserToOrderColumns = true;
             this.dataGridGames.AllowUserToResizeRows = false;
+            this.dataGridGames.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dataGridGames.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridGames.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridGames.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridGames.Location = new System.Drawing.Point(1, 52);
+            this.dataGridGames.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.dataGridGames.Location = new System.Drawing.Point(0, 0);
             this.dataGridGames.Name = "dataGridGames";
-            this.dataGridGames.ReadOnly = true;
-            this.dataGridGames.Size = new System.Drawing.Size(719, 420);
+            this.dataGridGames.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridGames.Size = new System.Drawing.Size(719, 393);
             this.dataGridGames.TabIndex = 22;
             this.dataGridGames.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridGames_CellFormatting);
             // 
-            // groupBox1
+            // panel7
             // 
-            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.btnActivateAvalableRoms);
-            this.groupBox1.Controls.Add(this.btnLoadFromHyperSpin);
-            this.groupBox1.Controls.Add(this.cboxXMLUpdate);
-            this.groupBox1.Controls.Add(this.cboxXMLInsert);
-            this.groupBox1.Controls.Add(this.btnLoadFromNoIntro);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox1.Location = new System.Drawing.Point(1, 1);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(719, 51);
-            this.groupBox1.TabIndex = 19;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Load platform rom data from XML";
+            this.panel7.Controls.Add(this.label8);
+            this.panel7.Controls.Add(this.cboxXMLInsert);
+            this.panel7.Controls.Add(this.cboxXMLUpdate);
+            this.panel7.Controls.Add(this.btnLoadFromHyperSpin);
+            this.panel7.Controls.Add(this.btnLoadFromNoIntro);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel7.Location = new System.Drawing.Point(1, 26);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(719, 49);
+            this.panel7.TabIndex = 24;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.Color.Red;
-            this.label8.Location = new System.Drawing.Point(153, 35);
+            this.label8.Location = new System.Drawing.Point(158, 29);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(208, 13);
             this.label8.TabIndex = 19;
             this.label8.Text = "Recomend you do not insert from both";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnActivateAvalableRoms
+            // cboxXMLInsert
             // 
-            this.btnActivateAvalableRoms.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnActivateAvalableRoms.Enabled = false;
-            this.btnActivateAvalableRoms.Location = new System.Drawing.Point(581, 18);
-            this.btnActivateAvalableRoms.Name = "btnActivateAvalableRoms";
-            this.btnActivateAvalableRoms.Size = new System.Drawing.Size(132, 23);
-            this.btnActivateAvalableRoms.TabIndex = 21;
-            this.btnActivateAvalableRoms.Text = "Activate Avalable Roms";
-            this.btnActivateAvalableRoms.UseVisualStyleBackColor = true;
-            this.btnActivateAvalableRoms.Click += new System.EventHandler(this.btnActivateAvalableRoms_Click);
+            this.cboxXMLInsert.AutoSize = true;
+            this.cboxXMLInsert.Location = new System.Drawing.Point(3, 9);
+            this.cboxXMLInsert.Name = "cboxXMLInsert";
+            this.cboxXMLInsert.Size = new System.Drawing.Size(55, 17);
+            this.cboxXMLInsert.TabIndex = 15;
+            this.cboxXMLInsert.Text = "Insert";
+            this.cboxXMLInsert.UseVisualStyleBackColor = true;
+            // 
+            // cboxXMLUpdate
+            // 
+            this.cboxXMLUpdate.AutoSize = true;
+            this.cboxXMLUpdate.Location = new System.Drawing.Point(64, 9);
+            this.cboxXMLUpdate.Name = "cboxXMLUpdate";
+            this.cboxXMLUpdate.Size = new System.Drawing.Size(63, 17);
+            this.cboxXMLUpdate.TabIndex = 16;
+            this.cboxXMLUpdate.Text = "update";
+            this.cboxXMLUpdate.UseVisualStyleBackColor = true;
             // 
             // btnLoadFromHyperSpin
             // 
-            this.btnLoadFromHyperSpin.Location = new System.Drawing.Point(261, 12);
+            this.btnLoadFromHyperSpin.Location = new System.Drawing.Point(264, 3);
             this.btnLoadFromHyperSpin.Name = "btnLoadFromHyperSpin";
             this.btnLoadFromHyperSpin.Size = new System.Drawing.Size(125, 23);
             this.btnLoadFromHyperSpin.TabIndex = 17;
@@ -520,29 +557,9 @@
             this.btnLoadFromHyperSpin.UseVisualStyleBackColor = true;
             this.btnLoadFromHyperSpin.Click += new System.EventHandler(this.btnLoadFromHyperSpin_Click);
             // 
-            // cboxXMLUpdate
-            // 
-            this.cboxXMLUpdate.AutoSize = true;
-            this.cboxXMLUpdate.Location = new System.Drawing.Point(65, 18);
-            this.cboxXMLUpdate.Name = "cboxXMLUpdate";
-            this.cboxXMLUpdate.Size = new System.Drawing.Size(63, 17);
-            this.cboxXMLUpdate.TabIndex = 16;
-            this.cboxXMLUpdate.Text = "update";
-            this.cboxXMLUpdate.UseVisualStyleBackColor = true;
-            // 
-            // cboxXMLInsert
-            // 
-            this.cboxXMLInsert.AutoSize = true;
-            this.cboxXMLInsert.Location = new System.Drawing.Point(7, 18);
-            this.cboxXMLInsert.Name = "cboxXMLInsert";
-            this.cboxXMLInsert.Size = new System.Drawing.Size(55, 17);
-            this.cboxXMLInsert.TabIndex = 15;
-            this.cboxXMLInsert.Text = "Insert";
-            this.cboxXMLInsert.UseVisualStyleBackColor = true;
-            // 
             // btnLoadFromNoIntro
             // 
-            this.btnLoadFromNoIntro.Location = new System.Drawing.Point(130, 12);
+            this.btnLoadFromNoIntro.Location = new System.Drawing.Point(133, 3);
             this.btnLoadFromNoIntro.Name = "btnLoadFromNoIntro";
             this.btnLoadFromNoIntro.Size = new System.Drawing.Size(125, 23);
             this.btnLoadFromNoIntro.TabIndex = 14;
@@ -550,16 +567,45 @@
             this.btnLoadFromNoIntro.UseVisualStyleBackColor = true;
             this.btnLoadFromNoIntro.Click += new System.EventHandler(this.btnLoadFromNoIntro_Click);
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnGamesSave,
+            this.btnCheckAvalableRoms});
+            this.toolStrip1.Location = new System.Drawing.Point(1, 1);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(719, 25);
+            this.toolStrip1.TabIndex = 23;
+            this.toolStrip1.Text = "toolStripGames";
+            // 
+            // btnGamesSave
+            // 
+            this.btnGamesSave.Image = ((System.Drawing.Image)(resources.GetObject("btnGamesSave.Image")));
+            this.btnGamesSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGamesSave.Name = "btnGamesSave";
+            this.btnGamesSave.Size = new System.Drawing.Size(51, 22);
+            this.btnGamesSave.Text = "Save";
+            this.btnGamesSave.Click += new System.EventHandler(this.btnGamesSave_Click);
+            // 
+            // btnCheckAvalableRoms
+            // 
+            this.btnCheckAvalableRoms.Image = ((System.Drawing.Image)(resources.GetObject("btnCheckAvalableRoms.Image")));
+            this.btnCheckAvalableRoms.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnCheckAvalableRoms.Name = "btnCheckAvalableRoms";
+            this.btnCheckAvalableRoms.Size = new System.Drawing.Size(141, 22);
+            this.btnCheckAvalableRoms.Text = "Check Avalable Roms";
+            this.btnCheckAvalableRoms.Click += new System.EventHandler(this.btnCheckAvalableRoms_Click);
+            // 
             // tabGenre
             // 
             this.tabGenre.Controls.Add(this.label11);
             this.tabGenre.Controls.Add(this.label1);
             this.tabGenre.Controls.Add(this.txtAltGenreNames);
             this.tabGenre.Controls.Add(this.toolStripGenre);
-            this.tabGenre.Location = new System.Drawing.Point(4, 22);
+            this.tabGenre.Location = new System.Drawing.Point(4, 26);
             this.tabGenre.Name = "tabGenre";
             this.tabGenre.Padding = new System.Windows.Forms.Padding(1);
-            this.tabGenre.Size = new System.Drawing.Size(721, 473);
+            this.tabGenre.Size = new System.Drawing.Size(721, 469);
             this.tabGenre.TabIndex = 3;
             this.tabGenre.Text = "Genre Settings";
             this.tabGenre.UseVisualStyleBackColor = true;
@@ -568,7 +614,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(17, 166);
+            this.label11.Location = new System.Drawing.Point(15, 39);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(366, 13);
             this.label11.TabIndex = 4;
@@ -578,7 +624,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(2, 151);
+            this.label1.Location = new System.Drawing.Point(4, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(134, 13);
             this.label1.TabIndex = 3;
@@ -586,13 +632,15 @@
             // 
             // txtAltGenreNames
             // 
+            this.txtAltGenreNames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAltGenreNames.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtAltGenreNames.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtAltGenreNames.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAltGenreNames.Location = new System.Drawing.Point(1, 179);
+            this.txtAltGenreNames.Location = new System.Drawing.Point(18, 55);
             this.txtAltGenreNames.Multiline = true;
             this.txtAltGenreNames.Name = "txtAltGenreNames";
-            this.txtAltGenreNames.Size = new System.Drawing.Size(719, 293);
+            this.txtAltGenreNames.Size = new System.Drawing.Size(684, 394);
             this.txtAltGenreNames.TabIndex = 2;
             // 
             // toolStripGenre
@@ -626,6 +674,65 @@
             this.btnSaveGenre.Text = "Save";
             this.btnSaveGenre.Click += new System.EventHandler(this.btnSaveGenre_Click);
             // 
+            // tabIcons
+            // 
+            this.tabIcons.Controls.Add(this.panel9);
+            this.tabIcons.Controls.Add(this.toolStripAssets);
+            this.tabIcons.Location = new System.Drawing.Point(4, 26);
+            this.tabIcons.Name = "tabIcons";
+            this.tabIcons.Padding = new System.Windows.Forms.Padding(3);
+            this.tabIcons.Size = new System.Drawing.Size(721, 469);
+            this.tabIcons.TabIndex = 4;
+            this.tabIcons.Text = "Assets";
+            this.tabIcons.UseVisualStyleBackColor = true;
+            // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.dataGridAssets);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel9.Location = new System.Drawing.Point(3, 28);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(715, 438);
+            this.panel9.TabIndex = 1;
+            // 
+            // dataGridAssets
+            // 
+            this.dataGridAssets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridAssets.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridAssets.Location = new System.Drawing.Point(0, 0);
+            this.dataGridAssets.Name = "dataGridAssets";
+            this.dataGridAssets.Size = new System.Drawing.Size(715, 438);
+            this.dataGridAssets.TabIndex = 0;
+            // 
+            // toolStripAssets
+            // 
+            this.toolStripAssets.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripAssets.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnAssetsSave,
+            this.btnAssetsRefresh});
+            this.toolStripAssets.Location = new System.Drawing.Point(3, 3);
+            this.toolStripAssets.Name = "toolStripAssets";
+            this.toolStripAssets.Size = new System.Drawing.Size(715, 25);
+            this.toolStripAssets.TabIndex = 0;
+            this.toolStripAssets.Text = "toolStripAssets";
+            // 
+            // btnAssetsSave
+            // 
+            this.btnAssetsSave.Image = ((System.Drawing.Image)(resources.GetObject("btnAssetsSave.Image")));
+            this.btnAssetsSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAssetsSave.Name = "btnAssetsSave";
+            this.btnAssetsSave.Size = new System.Drawing.Size(51, 22);
+            this.btnAssetsSave.Text = "Save";
+            this.btnAssetsSave.Click += new System.EventHandler(this.btnAssetsSave_Click);
+            // 
+            // btnAssetsRefresh
+            // 
+            this.btnAssetsRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnAssetsRefresh.Image")));
+            this.btnAssetsRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAssetsRefresh.Name = "btnAssetsRefresh";
+            this.btnAssetsRefresh.Size = new System.Drawing.Size(66, 22);
+            this.btnAssetsRefresh.Text = "Refresh";
+            // 
             // infoBox
             // 
             this.infoBox.BackColor = System.Drawing.Color.Black;
@@ -641,19 +748,19 @@
             this.infoBox.TabIndex = 17;
             this.infoBox.Text = "";
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.progressBar,
             this.toolStripStatus,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 639);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.statusStrip1.Size = new System.Drawing.Size(884, 22);
-            this.statusStrip1.SizingGrip = false;
-            this.statusStrip1.TabIndex = 17;
-            this.statusStrip1.Text = "statusStrip";
+            this.statusStrip.Location = new System.Drawing.Point(0, 639);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.statusStrip.Size = new System.Drawing.Size(884, 22);
+            this.statusStrip.SizingGrip = false;
+            this.statusStrip.TabIndex = 17;
+            this.statusStrip.Text = "statusStrip";
             // 
             // progressBar
             // 
@@ -671,15 +778,15 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(884, 24);
-            this.menuStrip1.TabIndex = 18;
-            this.menuStrip1.Text = "menuStrip";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(884, 24);
+            this.menuStrip.TabIndex = 18;
+            this.menuStrip.Text = "menuStrip";
             // 
             // fileToolStripMenuItem
             // 
@@ -775,8 +882,8 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.splitter2);
             this.Controls.Add(this.infoBox);
-            this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.menuStrip);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "datacadia";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -790,22 +897,32 @@
             this.panel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStripPlatforms.ResumeLayout(false);
+            this.toolStripPlatforms.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabGames.ResumeLayout(false);
+            this.tabGames.PerformLayout();
+            this.panel8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridGames)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.tabGenre.ResumeLayout(false);
             this.tabGenre.PerformLayout();
             this.toolStripGenre.ResumeLayout(false);
             this.toolStripGenre.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.tabIcons.ResumeLayout(false);
+            this.tabIcons.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridAssets)).EndInit();
+            this.toolStripAssets.ResumeLayout(false);
+            this.toolStripAssets.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
@@ -837,25 +954,22 @@
         private System.Windows.Forms.RichTextBox infoBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabPage tabGames;
-        private System.Windows.Forms.Button btnPlatformSave;
         private System.Windows.Forms.TextBox txtArcadiaEXEpath;
         private System.Windows.Forms.Button btnBrowseEXE;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripProgressBar progressBar;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatus;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtEmuPath;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnLoadFromHyperSpin;
         private System.Windows.Forms.CheckBox cboxXMLUpdate;
         private System.Windows.Forms.CheckBox cboxXMLInsert;
         private System.Windows.Forms.Button btnLoadFromNoIntro;
         private System.Windows.Forms.ListBox listboxPlatforms;
-        private System.Windows.Forms.Button btnActivateAvalableRoms;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.DataGridView dataGridGames;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -870,7 +984,7 @@
         private System.Windows.Forms.TextBox txtLoadString;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStripPlatforms;
         private System.Windows.Forms.ToolStripLabel toolStripLabelPlatforms;
         private System.Windows.Forms.ToolStripButton btnPlatformsSave;
         private System.Windows.Forms.Panel panel4;
@@ -878,6 +992,19 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.CheckBox cboxOnlyActive;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton btnGamesSave;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.ToolStripButton btnCheckAvalableRoms;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox cboxPlatformIcon;
+        private System.Windows.Forms.TabPage tabIcons;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.DataGridView dataGridAssets;
+        private System.Windows.Forms.ToolStrip toolStripAssets;
+        private System.Windows.Forms.ToolStripButton btnAssetsSave;
+        private System.Windows.Forms.ToolStripButton btnAssetsRefresh;
 
     }
 }

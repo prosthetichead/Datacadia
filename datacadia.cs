@@ -24,6 +24,7 @@ namespace Datacadia
         long? platform_id = 0;
 
         DataSet gameDataSet;
+        DataSet assetsDataSet;
 
         public datacadia()
         {
@@ -49,12 +50,45 @@ namespace Datacadia
 
             refreshPlatformsDataSet();
             refreshGamesDataSet();
+            refreshAssetsDataSet();
         }
         public void refreshGamesDataSet()
         {
+            //dataGridGames.AutoGenerateColumns = false;
+            dataGridGames.Columns.Clear();
+            dataGridGames.AutoGenerateColumns = false;
+
             // fill in details of games tab
-            gameDataSet = db.getDataSet("select games.active, games.name, games.file_name, games.region, genres.genre_name as genre, games.clone_of as clone from games, genres where games.genre_id = genres.id and platform_id = " + listboxPlatforms.SelectedValue);
-            dataGridGames.DataSource = gameDataSet.Tables[0].DefaultView;
+            gameDataSet = db.getDataSet("select * from games where platform_id = " + listboxPlatforms.SelectedValue + " order by name");
+            dataGridGames.DataSource = gameDataSet.Tables[0];
+           
+            DataSet gameGenreDataSet = db.getDataSet("select genre_name, id from genres order by genre_name");
+            DataGridViewComboBoxColumn colGenre = new DataGridViewComboBoxColumn();
+            colGenre.HeaderText = "Genre";
+            colGenre.DataSource = gameGenreDataSet.Tables[0].DefaultView;
+            colGenre.FlatStyle = FlatStyle.Flat;
+            
+            colGenre.DataPropertyName = "genre_id";
+            colGenre.DisplayMember = "genre_name";
+            colGenre.ValueMember = "id";
+
+            DataGridViewCheckBoxColumn colActive = new DataGridViewCheckBoxColumn();
+            colActive.HeaderText = "Active";
+            colActive.Name = "active";
+            colActive.DataPropertyName = "active";
+            dataGridGames.Columns.Add(colActive);
+
+            dataGridGames.Columns.Add("name", "Name");
+            dataGridGames.Columns["name"].DataPropertyName = "name";
+
+            dataGridGames.Columns.Add("description", "Description");
+            dataGridGames.Columns["description"].DataPropertyName = "description";
+
+            dataGridGames.Columns.Add("file_name", "File Name");
+            dataGridGames.Columns["file_name"].DataPropertyName = "file_name";
+
+            dataGridGames.Columns.Add(colGenre);
+            
         }
         public void refreshPlatformsDataSet()
         {
@@ -70,7 +104,13 @@ namespace Datacadia
             listboxPlatforms.DataSource = ds.Tables[0];
         }
 
+        public void refreshAssetsDataSet()
+        {
+            assetsDataSet = db.getDataSet("select * from assets");
+            dataGridAssets.DataSource = assetsDataSet.Tables[0];
 
+
+        }
 
         private void dbConnect_Click(object sender, EventArgs e)
         {
@@ -89,6 +129,7 @@ namespace Datacadia
 
                 tabPlatforms.Enabled = true;
                 tabGames.Enabled = true;
+                tabGenre.Enabled = true;
                 cboxOnlyActive.Enabled = true;
 
                 refreshAllDataSets();
@@ -335,76 +376,8 @@ namespace Datacadia
 
 
 
-        private void txtLoadString_TextChanged(object sender, EventArgs e)
-        {
-            btnPlatformSave.Text = "Save Changes";
-            btnPlatformSave.Enabled = true;
-        }
-        private void txtRomsPath_TextChanged(object sender, EventArgs e)
-        {
-            btnPlatformSave.Text = "Save Changes";
-            btnPlatformSave.Enabled = true;
+  
 
-            if (txtRomsPath.Text == "" || txtRomsPath.Text == null)
-            {
-                btnActivateAvalableRoms.Enabled = false;
-            }
-            else
-                btnActivateAvalableRoms.Enabled = true;
-
-        }
-        private void txtVideosPath_TextChanged(object sender, EventArgs e)
-        {
-            btnPlatformSave.Text = "Save Changes";
-            btnPlatformSave.Enabled = true;
-        }
-        private void txtImagesPath_TextChanged(object sender, EventArgs e)
-        {
-            btnPlatformSave.Text = "Save Changes";
-            btnPlatformSave.Enabled = true;
-        }
-        private void txtExtensions_TextChanged(object sender, EventArgs e)
-        {
-            btnPlatformSave.Text = "Save Changes";
-            btnPlatformSave.Enabled = true;
-        }
-        private void cboxActive_CheckedChanged(object sender, EventArgs e)
-        {
-            btnPlatformSave.Text = "Save Changes";
-            btnPlatformSave.Enabled = true;
-        }
-
-        private void btnActivateAvalableRoms_Click(object sender, EventArgs e)
-        {
-            progressBar.Value = 0;
-
-            string romsPath = txtRomsPath.Text.Replace("%PATH%", arcadiaPath);
-            string[] files = Directory.GetFiles(romsPath, "*.*");
-
-            infoBox.AppendText("\nActivating Avaliable roms in " + romsPath + "\n");
-            infoBox.AppendText(" " + files.Length + " files to check \n");
-            progressBar.Maximum = files.Length;
-
-            foreach (string file in files)
-            {
-                    progressBar.Value += 1;
-                    infoBox.AppendText(file, Color.WhiteSmoke);
-                    string file_name = Path.GetFileNameWithoutExtension(file);
-                    var command = new SQLiteCommand("update games set active = 1 where platform_id = @platform_id and file_name = @file_name");
-                    command.Parameters.AddWithValue("@file_name", file_name);
-                    command.Parameters.AddWithValue("@platform_id", platform_id);
-
-                    db.sqlExecute(command);
-                    infoBox.AppendText("\n Marked Active \n", Color.GreenYellow);
-
-                    Application.DoEvents();
-            }
-
-            progressBar.Value = 0;
-            infoBox.AppendText("\n\nRom Activation Complete\n");
-            infoBox.gotToBottom();
-            refreshGamesDataSet();
-        }
 
         private void listboxPlatforms_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -418,7 +391,16 @@ namespace Datacadia
             txtVideosPath.Text = ds.Tables[0].Rows[0].Field<string>("videos_path");
             txtImagesPath.Text = ds.Tables[0].Rows[0].Field<string>("images_path");
             txtExtensions.Text = ds.Tables[0].Rows[0].Field<string>("extension");
-
+            txtEmuPath.Text = ds.Tables[0].Rows[0].Field<string>("emu_path");
+            
+            string icon_id = ds.Tables[0].Rows[0].Field<string>("icon_id");
+            if (icon_id == null)
+                icon_id = "ERROR";
+            DataSet ds_icons = db.getDataSet("select * from assets where type = 'image' order by name");
+            cboxPlatformIcon.DisplayMember = "name";
+            cboxPlatformIcon.ValueMember = "id";
+            cboxPlatformIcon.DataSource = ds_icons.Tables[0];
+            cboxPlatformIcon.SelectedValue = icon_id;
             refreshGamesDataSet();
 
         }
@@ -428,17 +410,16 @@ namespace Datacadia
             if (dataGridGames.Columns[e.ColumnIndex].Name.Equals("active"))
             {
                 bool active = Convert.ToBoolean(e.Value);
-                Debug.WriteLine(active);
-                Debug.WriteLine(e.Value);
+
                 if (!active)
                 {
-                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Red;
-                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.DarkRed;
+                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(204,102,102);
+                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.FromArgb(204, 51, 51);
                 }
                 else
                 {
-                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.CadetBlue;
-                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.DarkTurquoise;
+                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(118, 196, 108);
+                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.FromArgb(88, 186, 83);
                 }
             }
         }
@@ -491,12 +472,16 @@ namespace Datacadia
 
         private void btnPlatformsSave_Click(object sender, EventArgs e)
         {
-            var command = new SQLiteCommand("update platforms set load_string = @load_string, roms_path = @roms_path, videos_path = @videos_path, images_path = @images_path, extension = @extension, active = @active where id = @platform_id");
+            var command = new SQLiteCommand("update platforms set emu_path = @emu_path, icon_id = @icon_id, load_string = @load_string, roms_path = @roms_path, videos_path = @videos_path, images_path = @images_path, extension = @extension, active = @active where id = @platform_id");
             command.Parameters.AddWithValue("@load_string", txtLoadString.Text);
             command.Parameters.AddWithValue("@roms_path", txtRomsPath.Text);
             command.Parameters.AddWithValue("@videos_path", txtVideosPath.Text);
             command.Parameters.AddWithValue("@images_path", txtImagesPath.Text);
             command.Parameters.AddWithValue("@extension", txtExtensions.Text);
+            command.Parameters.AddWithValue("@icon_id", cboxPlatformIcon.SelectedValue as string);
+            command.Parameters.AddWithValue("@emu_path", txtEmuPath.Text);
+
+
             if (cboxActive.Checked)
                 command.Parameters.AddWithValue("@active", 1);
             else
@@ -506,9 +491,6 @@ namespace Datacadia
 
             db.sqlExecute(command);
 
-            btnPlatformSave.Text = "Saved";
-            btnPlatformSave.Enabled = false;
-
             infoBox.AppendText(listboxPlatforms.Text, Color.WhiteSmoke);
             infoBox.AppendText("\n Changes Saved \n", Color.GreenYellow);
         }
@@ -516,6 +498,50 @@ namespace Datacadia
         private void cboxOnlyActive_CheckedChanged(object sender, EventArgs e)
         {
             refreshPlatformsDataSet();
+        }
+
+        private void btnGamesSave_Click(object sender, EventArgs e)
+        {
+            db.SaveDataTable(gameDataSet, "games");
+            gameDataSet.AcceptChanges();
+        }
+
+        private void btnCheckAvalableRoms_Click(object sender, EventArgs e)
+        {
+            progressBar.Value = 0;
+
+            string romsPath = txtRomsPath.Text.Replace("%PATH%", arcadiaPath);
+            string[] files = Directory.GetFiles(romsPath, "*.*");
+
+            infoBox.AppendText("\nActivating Avaliable roms in " + romsPath + "\n");
+            infoBox.AppendText(" " + files.Length + " files to check \n");
+            progressBar.Maximum = files.Length;
+
+            foreach (string file in files)
+            {
+                progressBar.Value += 1;
+                infoBox.AppendText(file, Color.WhiteSmoke);
+                string file_name = Path.GetFileNameWithoutExtension(file);
+                var command = new SQLiteCommand("update games set active = 1 where platform_id = @platform_id and file_name = @file_name");
+                command.Parameters.AddWithValue("@file_name", file_name);
+                command.Parameters.AddWithValue("@platform_id", platform_id);
+
+                db.sqlExecute(command);
+                infoBox.AppendText("\n Marked Active \n", Color.GreenYellow);
+
+                Application.DoEvents();
+            }
+
+            progressBar.Value = 0;
+            infoBox.AppendText("\n\nRom Activation Complete\n");
+            infoBox.gotToBottom();
+            refreshGamesDataSet();
+        }
+
+        private void btnAssetsSave_Click(object sender, EventArgs e)
+        {
+            db.SaveDataTable(assetsDataSet, "assets");
+            assetsDataSet.AcceptChanges();
         }
 
 
