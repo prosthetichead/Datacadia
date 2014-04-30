@@ -53,10 +53,19 @@
       <DependentUpon>datacadia.cs</DependentUpon>
     </Compile>
     <Compile Include="dbHandle.cs" />
+    <Compile Include="GameDB_Search.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameDB_Search.Designer.cs">
+      <DependentUpon>GameDB_Search.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="datacadia.resx">
       <DependentUpon>datacadia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameDB_Search.resx">
+      <DependentUpon>GameDB_Search.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

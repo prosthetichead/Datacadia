@@ -100,6 +100,7 @@
             this.cboxOnlyActive = new System.Windows.Forms.CheckBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btnGameOnGameDB = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tabConnection.SuspendLayout();
             this.tabPlatforms.SuspendLayout();
@@ -571,7 +572,8 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnGamesSave,
-            this.btnCheckAvalableRoms});
+            this.btnCheckAvalableRoms,
+            this.btnGameOnGameDB});
             this.toolStrip1.Location = new System.Drawing.Point(1, 1);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(719, 25);
@@ -871,6 +873,15 @@
             this.panel5.Size = new System.Drawing.Size(729, 499);
             this.panel5.TabIndex = 25;
             // 
+            // btnGameOnGameDB
+            // 
+            this.btnGameOnGameDB.Image = ((System.Drawing.Image)(resources.GetObject("btnGameOnGameDB.Image")));
+            this.btnGameOnGameDB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGameOnGameDB.Name = "btnGameOnGameDB";
+            this.btnGameOnGameDB.Size = new System.Drawing.Size(126, 22);
+            this.btnGameOnGameDB.Text = "Check on GameDB";
+            this.btnGameOnGameDB.Click += new System.EventHandler(this.btnGameOnGameDB_Click);
+            // 
             // datacadia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1005,6 +1016,7 @@
         private System.Windows.Forms.ToolStrip toolStripAssets;
         private System.Windows.Forms.ToolStripButton btnAssetsSave;
         private System.Windows.Forms.ToolStripButton btnAssetsRefresh;
+        private System.Windows.Forms.ToolStripButton btnGameOnGameDB;
 
     }
 }

@@ -12,7 +12,8 @@ using System.Data.SQLite;
 using System.IO;
 using System.Xml.Linq;
 using System.Threading;
-
+using System.Net;
+using System.Text.RegularExpressions;
 
 
 namespace Datacadia
@@ -544,10 +545,65 @@ namespace Datacadia
             assetsDataSet.AcceptChanges();
         }
 
+        private void btnGameOnGameDB_Click(object sender, EventArgs e)
+        {
+            string platform_name = listboxPlatforms.Text;
+            //string game_fileName = dataGridGames.SelectedRows
+
+            foreach (DataGridViewRow r in dataGridGames.SelectedRows)
+            {
+                string game_fileName = r.Cells["file_name"].Value as string;
+                long gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
+
+                if (gamedb_id == 0)
+                {
+
+                    string searchString = Regex.Replace(game_fileName, "(\\[.*\\])|(\\(.*\\))", ""); /// Remove all the text between square and round brackets
+                    GameDB_Search gameDB_Search = new GameDB_Search(searchString, platform_name, game_fileName);
 
 
+
+                    if (gameDB_Search.ShowDialog() == DialogResult.OK)
+                    {
+                        gamedb_id = gameDB_Search.ReturnedID;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    // Write new gamedb_id to table
+                    var command = new SQLiteCommand("update games set gamedb_id = @gamedb_id where platform_id = @platform_id and file_name = @file_name");
+                    command.Parameters.AddWithValue("@gamedb_id", gamedb_id);                  
+                    command.Parameters.AddWithValue("@file_name", game_fileName);
+                    command.Parameters.AddWithValue("@platform_id", platform_id);
+                    db.sqlExecute(command);
+                }
+
+               
+                // get xml for game from gamesdb.net
+                string url = string.Format("http://thegamesdb.net/api/GetGame.php?id={0}", gamedb_id);
+                string xml = new WebClient().DownloadString(url);
+                StringReader stringReader = new StringReader(xml);
+                XDocument xmlDoc = XDocument.Load(stringReader);
+                XElement game_node = xmlDoc.Descendants("Game").First();
+                
+                string overview = game_node.Element("Overview").Value;
+                
+                var commandGameUpdate = new SQLiteCommand("update games set description = @overview where platform_id = @platform_id and file_name = @file_name");
+                commandGameUpdate.Parameters.AddWithValue("@overview", overview);
+                commandGameUpdate.Parameters.AddWithValue("@file_name", game_fileName);
+                commandGameUpdate.Parameters.AddWithValue("@platform_id", platform_id);
+                db.sqlExecute(commandGameUpdate);
+
+            }
+                
+
+
+            }
+
+        }
     }
-}
+
 
 public static class RichTextBoxExtensions
 {

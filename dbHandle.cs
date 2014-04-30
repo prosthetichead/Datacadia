@@ -125,8 +125,35 @@ namespace Datacadia
             catch (Exception e)
             {
                 System.Windows.Forms.MessageBox.Show(e.Message + "\n" + command.CommandText);
+                throw;
             }
+        }
 
+        public long getGameDB_ID(long? platform_id, string file_name)
+        {
+            long? gamedb_id = 0;
+            try
+            {
+                var command = conn.CreateCommand();
+                command.CommandText = "SELECT gamedb_id from games where platform_id = @platform_id and file_name = @file_name";
+                command.Parameters.AddWithValue("@platform_id", platform_id);
+                command.Parameters.AddWithValue("@file_name", file_name);
+
+                SQLiteDataReader reader = command.ExecuteReader();
+                reader.Read();
+                if (reader.HasRows)
+                {
+                    gamedb_id = reader[0] as long?;
+                }
+
+                return gamedb_id.GetValueOrDefault(); 
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show(e.Message + "\n\nplatform ID = " + platform_id + "\nGame File Name = " + file_name);
+                throw;
+            }
+            
         }
 
         public void SaveDataTable(DataSet DS, string table_name)
@@ -144,5 +171,9 @@ namespace Datacadia
                 System.Windows.Forms.MessageBox.Show(e.Message);
             }
         }
+
+
     }
+
+
 }
