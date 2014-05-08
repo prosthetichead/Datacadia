@@ -22,9 +22,8 @@ namespace Datacadia
     {
         dbHandle db;
         string arcadiaPath;
-        long? platform_id = 0;
+        long platform_id = 0;
 
-        DataSet gameDataSet;
         DataSet assetsDataSet;
 
         public datacadia()
@@ -35,8 +34,6 @@ namespace Datacadia
             tabGames.Enabled = false;
             tabGenre.Enabled = false;
         }
-
-
         public void updateInfoBox(string text, Color colour)
         {
             infoBox.AppendText(text + "\n", colour);
@@ -59,16 +56,16 @@ namespace Datacadia
             dataGridGames.Columns.Clear();
             dataGridGames.AutoGenerateColumns = false;
 
-            // fill in details of games tab
-            gameDataSet = db.getDataSet("select * from games where platform_id = " + listboxPlatforms.SelectedValue + " order by name");
-            dataGridGames.DataSource = gameDataSet.Tables[0];
-           
+            //Hook up the db.dsGames dataset to the table
+            db.refreshGameDataset(platform_id);
+            dataGridGames.DataSource = db.dsGames.Tables[0];
+
             DataSet gameGenreDataSet = db.getDataSet("select genre_name, id from genres order by genre_name");
             DataGridViewComboBoxColumn colGenre = new DataGridViewComboBoxColumn();
             colGenre.HeaderText = "Genre";
             colGenre.DataSource = gameGenreDataSet.Tables[0].DefaultView;
             colGenre.FlatStyle = FlatStyle.Flat;
-            
+
             colGenre.DataPropertyName = "genre_id";
             colGenre.DisplayMember = "genre_name";
             colGenre.ValueMember = "id";
@@ -77,19 +74,56 @@ namespace Datacadia
             colActive.HeaderText = "Active";
             colActive.Name = "active";
             colActive.DataPropertyName = "active";
+            colActive.SortMode = DataGridViewColumnSortMode.Automatic;
             dataGridGames.Columns.Add(colActive);
+
+            DataGridViewCheckBoxColumn colFav = new DataGridViewCheckBoxColumn();
+            colFav.HeaderText = "Favourite";
+            colFav.Name = "favourite";
+            colFav.DataPropertyName = "favourite";
+            colFav.SortMode = DataGridViewColumnSortMode.Automatic;
+            dataGridGames.Columns.Add(colFav);
+
 
             dataGridGames.Columns.Add("name", "Name");
             dataGridGames.Columns["name"].DataPropertyName = "name";
 
-            dataGridGames.Columns.Add("description", "Description");
-            dataGridGames.Columns["description"].DataPropertyName = "description";
-
             dataGridGames.Columns.Add("file_name", "File Name");
             dataGridGames.Columns["file_name"].DataPropertyName = "file_name";
 
+            dataGridGames.Columns.Add("gamedb_id", "GamesDB ID");
+            dataGridGames.Columns["gamedb_id"].DataPropertyName = "gamedb_id";
+
+            dataGridGames.Columns.Add("description", "Description");
+            dataGridGames.Columns["description"].DataPropertyName = "description";
+
+            dataGridGames.Columns.Add("release_year", "Release Year");
+            dataGridGames.Columns["release_year"].DataPropertyName = "release_year";
+
+            dataGridGames.Columns.Add("rating", "Rating");
+            dataGridGames.Columns["rating"].DataPropertyName = "rating";
+
+            dataGridGames.Columns.Add("players", "Players");
+            dataGridGames.Columns["players"].DataPropertyName = "players";
+
+            DataGridViewCheckBoxColumn colCo_op = new DataGridViewCheckBoxColumn();
+            colCo_op.HeaderText = "Co-op";
+            colCo_op.Name = "co_op";
+            colCo_op.DataPropertyName = "co_op";
+            colCo_op.SortMode = DataGridViewColumnSortMode.Automatic;
+            dataGridGames.Columns.Add(colCo_op);
+
+            dataGridGames.Columns.Add("publisher", "Publisher");
+            dataGridGames.Columns["publisher"].DataPropertyName = "publisher";
+
+            dataGridGames.Columns.Add("developer", "Developer");
+            dataGridGames.Columns["developer"].DataPropertyName = "developer";
+
+            dataGridGames.Columns.Add("gamedb_stars", "GamesDB Stars");
+            dataGridGames.Columns["gamedb_stars"].DataPropertyName = "gamedb_stars";
+
             dataGridGames.Columns.Add(colGenre);
-            
+
         }
         public void refreshPlatformsDataSet()
         {
@@ -104,7 +138,6 @@ namespace Datacadia
             listboxPlatforms.ValueMember = "id";
             listboxPlatforms.DataSource = ds.Tables[0];
         }
-
         public void refreshAssetsDataSet()
         {
             assetsDataSet = db.getDataSet("select * from assets");
@@ -112,7 +145,6 @@ namespace Datacadia
 
 
         }
-
         private void dbConnect_Click(object sender, EventArgs e)
         {
             if (db.connect(dbLocation.Text))
@@ -123,7 +155,7 @@ namespace Datacadia
                 btnBrowseEXE.Enabled = false;
 
                 arcadiaPath = Path.GetDirectoryName(txtArcadiaEXEpath.Text);
-                
+
 
 
                 infoBox.AppendText("Connected to Arcadia Database \n", Color.LavenderBlush);
@@ -138,8 +170,6 @@ namespace Datacadia
             else
                 System.Windows.Forms.MessageBox.Show("Cant find file");
         }
-
-
         private void btnBrowse_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -160,7 +190,6 @@ namespace Datacadia
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 txtArcadiaEXEpath.Text = openFileDialog1.FileName;
         }
-
         private void btnLoadFromNoIntro_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -178,13 +207,7 @@ namespace Datacadia
                 string file_name;
                 string region;
                 string clone_of;
-                int countUpdated = 0;
-                int countInserted = 0;
-                int countSkiped = 0;
-
-                progressBar.Maximum = xmlDoc.Descendants("game").Count();
                 
-
                 foreach (XElement game_node in xmlDoc.Descendants("game"))
                 {
                     progressBar.Value += 1;
@@ -206,185 +229,54 @@ namespace Datacadia
                         region = "No_Release";
                     }
 
-                    
-                    //Check if game is already in our database using file_name or crc;
-                    if (db.gameExists(platform_id, file_name))
-                    {
-                        if (cboxXMLUpdate.Checked == true)
-                        {
-                            var command = new SQLiteCommand("update games set name = @name, region = @region, clone_of = @clone_of where platform_id = @platform_id and file_name = @file_name");
-                            command.Parameters.AddWithValue("@crc", crc);
-                            command.Parameters.AddWithValue("@platform_id", platform_id);
-                            command.Parameters.AddWithValue("@name", release_name);
-                            command.Parameters.AddWithValue("@region", region);
-                            command.Parameters.AddWithValue("@file_name", file_name);
-                            command.Parameters.AddWithValue("@clone_of", clone_of);
-                            db.sqlExecute(command);
-                            infoBox.AppendText(release_name, Color.WhiteSmoke);
-                            infoBox.AppendText("\n  Updated existing record \n", Color.GreenYellow);
-                            countUpdated++;
-                        }
-                        else
-                        {
-                            infoBox.AppendText(release_name, Color.WhiteSmoke);
-                            infoBox.AppendText("\n  Not Updated as update not checked \n", Color.Coral);
-                            countSkiped++;
-                        }
-                        
-                    }
-                    else
-                    {
-                        if (cboxXMLInsert.Checked == true)
-                        {
-                            var command = new SQLiteCommand("INSERT INTO games (crc, platform_id, name, region, file_name, clone_of) VALUES (@crc, @platform_id, @name, @region, @file_name, @clone_of)");
-                            command.Parameters.AddWithValue("@crc", crc);
-                            command.Parameters.AddWithValue("@platform_id", platform_id);
-                            command.Parameters.AddWithValue("@name", release_name);
-                            command.Parameters.AddWithValue("@region", region);
-                            command.Parameters.AddWithValue("@file_name", file_name);
-                            command.Parameters.AddWithValue("@clone_of", clone_of);
-                            db.sqlExecute(command);
-                            infoBox.AppendText(release_name, Color.WhiteSmoke);
-                            infoBox.AppendText("\n  Inserted \n", Color.GreenYellow);
-                            countInserted++;
 
-                        }
-                        else
-                        {
-                            infoBox.AppendText(release_name, Color.WhiteSmoke);
-                            infoBox.AppendText("\n  Not Inserted as insert not checked \n", Color.Coral);
-                            countSkiped++;
-                        }
-                    }
                 }
-
-                progressBar.Value = 0;
-                infoBox.AppendText("\n No-Intro XML Load Completed \n");
-                infoBox.AppendText("  " + countInserted + " Item(s) Inserted : " + countUpdated + " Item(s) Updated : " + countSkiped + " Item(s) Skipped \n", Color.LemonChiffon);
-                infoBox.gotToBottom();
-                refreshGamesDataSet();                
             }
         }
-
         private void btnLoadFromHyperSpin_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
             openFileDialog1.Filter = "xml|*.xml";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 XDocument xmlDoc = XDocument.Load(openFileDialog1.FileName);
                 infoBox.AppendText("LOADED XML FILE \n " + openFileDialog1.FileName + "\n");
 
-                string file_name;
-                string name;
-                string crc;
-                string manufacturer;
-                string year;
-                string genre;
-                string rating;
-                
-                int countUpdated = 0;
-                int countInserted = 0;
-                int countSkiped = 0;
-
-
-                progressBar.Maximum = xmlDoc.Descendants("game").Count();
                 foreach (XElement game_node in xmlDoc.Descendants("game"))
                 {
-                    progressBar.Value += 1;
+                    dbHandle.gameData newItem = new dbHandle.gameData();
+                    newItem.platform_id = platform_id;
+
                     if (game_node.Element("crc") != null)
-                        crc = game_node.Element("crc").Value;
+                        newItem.crc = game_node.Element("crc").Value;
                     else
-                        crc = "";
-                    file_name = game_node.Attribute("name").Value;
-                    name = game_node.Element("description").Value;
-                    manufacturer = game_node.Element("manufacturer").Value;
-                    year = game_node.Element("year").Value;
-                    genre = game_node.Element("genre").Value;
-                    rating = game_node.Element("rating").Value;
-                    long genre_id = db.getGenreID(genre);
+                        newItem.crc = "";
 
+                    newItem.file_name = game_node.Attribute("name").Value;
+                    newItem.name = game_node.Element("description").Value;
+                    newItem.developer = game_node.Element("manufacturer").Value;
+                    newItem.rating = game_node.Element("rating").Value;
+                    if (!Int64.TryParse(game_node.Element("year").Value, out newItem.release_year))
+                        newItem.release_year = 0;
 
-                    infoBox.AppendText(name, Color.WhiteSmoke);
-                    if (genre_id == 0)
-                    {
-                        infoBox.AppendText("\n ALERT: " + genre + " genre could not be mapped to a genre ID", Color.Coral);
-                    }
+                    string genre = game_node.Element("genre").Value;
+                    newItem.genre_id = db.getGenreID(genre);
 
-                    //Check if game is already in our database using file_name or crc;
-                    if (db.gameExists(platform_id, file_name))
-                    {
-                        if (cboxXMLUpdate.Checked == true)
-                        {
-                            var command = new SQLiteCommand("update games set name = @name, developer = @manufacturer, release_year = @year, genre_id = @genre_id, rating = @rating where platform_id = @platform_id and file_name = @file_name");
+                    db.upsertGamesDataset(newItem);
 
-                            command.Parameters.AddWithValue("@name", name);
-                            command.Parameters.AddWithValue("@manufacturer", manufacturer);
-                            command.Parameters.AddWithValue("@year", year);
-                            command.Parameters.AddWithValue("@genre_id", genre_id);
-                            command.Parameters.AddWithValue("@rating", rating);                            
-                            command.Parameters.AddWithValue("@platform_id", platform_id);
-                            command.Parameters.AddWithValue("@file_name", file_name);
-
-                            db.sqlExecute(command);
-
-                            infoBox.AppendText("\n  Updated existing record \n", Color.GreenYellow);
-                            countUpdated++;
-                        }
-                        else
-                        {
-                            infoBox.AppendText("\n  Not Updated as update not checked \n", Color.Coral);
-                            countSkiped++;
-                        }
-                    }
-                    else
-                    {
-                        if (cboxXMLInsert.Checked == true)
-                        {
-                            var command = new SQLiteCommand("INSERT INTO games (crc, platform_id, name, developer, file_name, release_year, genre_id, rating, region) VALUES (@crc, @platform_id, @name, @manufacturer, @file_name, @year, @genre_id, @rating, @region)");
-                            command.Parameters.AddWithValue("@crc", crc);
-                            command.Parameters.AddWithValue("@name", name);
-                            command.Parameters.AddWithValue("@manufacturer", manufacturer);
-                            command.Parameters.AddWithValue("@year", year);
-                            command.Parameters.AddWithValue("@genre_id", genre_id);
-                            command.Parameters.AddWithValue("@rating", rating);
-                            command.Parameters.AddWithValue("@platform_id", platform_id);
-                            command.Parameters.AddWithValue("@file_name", file_name);
-                            command.Parameters.AddWithValue("@region", "NULL");
-                            db.sqlExecute(command);
-                            
-                            infoBox.AppendText("\n  Inserted \n", Color.GreenYellow);
-                            countInserted++;
-                        }
-                        else
-                        {
-                            infoBox.AppendText(name, Color.WhiteSmoke);
-                            infoBox.AppendText("\n  Not Inserted as insert not checked \n", Color.Coral);
-                            countSkiped++;
-                        }
-                    }
                 }
-                progressBar.Value = 0;
-                infoBox.AppendText("\n\nHyperspin XML Load Completed \n");
-                infoBox.AppendText("  " + countInserted + " Item(s) Inserted : " + countUpdated + " Item(s) Updated : " + countSkiped + " Item(s) Skipped \n", Color.LemonChiffon);
-                infoBox.gotToBottom();
-                refreshGamesDataSet();
             }
+            
         }
-
-
-
-  
-
-
         private void listboxPlatforms_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Fill in details on platform Tab
-            DataSet ds = db.getDataSet("select * from platforms where id = " + listboxPlatforms.SelectedValue);            
-            platform_id = listboxPlatforms.SelectedValue as long?;
+            DataSet ds = db.getDataSet("select * from platforms where id = " + listboxPlatforms.SelectedValue);
+            long? platform_id_null = listboxPlatforms.SelectedValue as long?;
+            platform_id = platform_id_null.GetValueOrDefault();
 
             cboxActive.Checked = ds.Tables[0].Rows[0].Field<bool>("active");
             txtLoadString.Text = ds.Tables[0].Rows[0].Field<string>("load_string");
@@ -393,7 +285,7 @@ namespace Datacadia
             txtImagesPath.Text = ds.Tables[0].Rows[0].Field<string>("images_path");
             txtExtensions.Text = ds.Tables[0].Rows[0].Field<string>("extension");
             txtEmuPath.Text = ds.Tables[0].Rows[0].Field<string>("emu_path");
-            
+
             string icon_id = ds.Tables[0].Rows[0].Field<string>("icon_id");
             if (icon_id == null)
                 icon_id = "ERROR";
@@ -405,7 +297,6 @@ namespace Datacadia
             refreshGamesDataSet();
 
         }
-
         private void dataGridGames_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dataGridGames.Columns[e.ColumnIndex].Name.Equals("active"))
@@ -414,7 +305,7 @@ namespace Datacadia
 
                 if (!active)
                 {
-                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(204,102,102);
+                    dataGridGames.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(204, 102, 102);
                     dataGridGames.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.FromArgb(204, 51, 51);
                 }
                 else
@@ -424,11 +315,6 @@ namespace Datacadia
                 }
             }
         }
-
-
-        /* --Genre Tab
-         * combobox Genres Changed
-         */
         private void comboBoxGenres_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Get dataset for selected genre
@@ -439,9 +325,6 @@ namespace Datacadia
             txtAltGenreNames.Text = ds.Tables[0].Rows[0].Field<string>("alt_names");
 
         }
-        /* --Genre Tab
-        * Save Button Clicked
-        */
         private void btnSaveGenre_Click(object sender, EventArgs e)
         {
             long? genre_id = comboBoxGenres.ComboBox.SelectedValue as long?;
@@ -451,14 +334,13 @@ namespace Datacadia
             command.Parameters.AddWithValue("@genre_id", genre_id);
 
             db.sqlExecute(command);
-            infoBox.AppendText("\ngenre "+ comboBoxGenres.ComboBox.Text + " updated \n");
+            infoBox.AppendText("\ngenre " + comboBoxGenres.ComboBox.Text + " updated \n");
             infoBox.gotToBottom();
         }
-
         private void btnClearPlatform_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to delete all "+ listboxPlatforms.Text + " game data from the database?", "Confirmation", MessageBoxButtons.YesNo);
-            if(result == DialogResult.Yes)
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete all " + listboxPlatforms.Text + " game data from the database?", "Confirmation", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
                 var command = new SQLiteCommand("delete from games where platform_id = @platform_id");
                 command.Parameters.AddWithValue("@platform_id", platform_id);
@@ -470,7 +352,6 @@ namespace Datacadia
                 refreshGamesDataSet();
             }
         }
-
         private void btnPlatformsSave_Click(object sender, EventArgs e)
         {
             var command = new SQLiteCommand("update platforms set emu_path = @emu_path, icon_id = @icon_id, load_string = @load_string, roms_path = @roms_path, videos_path = @videos_path, images_path = @images_path, extension = @extension, active = @active where id = @platform_id");
@@ -495,18 +376,10 @@ namespace Datacadia
             infoBox.AppendText(listboxPlatforms.Text, Color.WhiteSmoke);
             infoBox.AppendText("\n Changes Saved \n", Color.GreenYellow);
         }
-
         private void cboxOnlyActive_CheckedChanged(object sender, EventArgs e)
         {
             refreshPlatformsDataSet();
         }
-
-        private void btnGamesSave_Click(object sender, EventArgs e)
-        {
-            db.SaveDataTable(gameDataSet, "games");
-            gameDataSet.AcceptChanges();
-        }
-
         private void btnCheckAvalableRoms_Click(object sender, EventArgs e)
         {
             progressBar.Value = 0;
@@ -538,30 +411,30 @@ namespace Datacadia
             infoBox.gotToBottom();
             refreshGamesDataSet();
         }
-
         private void btnAssetsSave_Click(object sender, EventArgs e)
         {
             db.SaveDataTable(assetsDataSet, "assets");
             assetsDataSet.AcceptChanges();
         }
-
+        
+        //Game Tab
+        // get meta data from theGamesDB.net
         private void btnGameOnGameDB_Click(object sender, EventArgs e)
         {
             string platform_name = listboxPlatforms.Text;
-            //string game_fileName = dataGridGames.SelectedRows
+            int selectedrows = dataGridGames.FirstDisplayedScrollingRowIndex;
 
             foreach (DataGridViewRow r in dataGridGames.SelectedRows)
             {
                 string game_fileName = r.Cells["file_name"].Value as string;
-                long gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
+                string game_name = r.Cells["name"].Value as string;
+                string gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
 
-                if (gamedb_id == 0)
+                if (gamedb_id == "0")
                 {
 
-                    string searchString = Regex.Replace(game_fileName, "(\\[.*\\])|(\\(.*\\))", ""); /// Remove all the text between square and round brackets
+                    string searchString = Regex.Replace(game_name, "(\\[.*\\])|(\\(.*\\))", ""); /// Remove all the text between square and round brackets
                     GameDB_Search gameDB_Search = new GameDB_Search(searchString, platform_name, game_fileName);
-
-
 
                     if (gameDB_Search.ShowDialog() == DialogResult.OK)
                     {
@@ -573,36 +446,92 @@ namespace Datacadia
                     }
                     // Write new gamedb_id to table
                     var command = new SQLiteCommand("update games set gamedb_id = @gamedb_id where platform_id = @platform_id and file_name = @file_name");
-                    command.Parameters.AddWithValue("@gamedb_id", gamedb_id);                  
+                    command.Parameters.AddWithValue("@gamedb_id", gamedb_id);
                     command.Parameters.AddWithValue("@file_name", game_fileName);
                     command.Parameters.AddWithValue("@platform_id", platform_id);
                     db.sqlExecute(command);
                 }
 
-               
+
                 // get xml for game from gamesdb.net
                 string url = string.Format("http://thegamesdb.net/api/GetGame.php?id={0}", gamedb_id);
                 string xml = new WebClient().DownloadString(url);
                 StringReader stringReader = new StringReader(xml);
                 XDocument xmlDoc = XDocument.Load(stringReader);
                 XElement game_node = xmlDoc.Descendants("Game").First();
-                
-                string overview = game_node.Element("Overview").Value;
-                
-                var commandGameUpdate = new SQLiteCommand("update games set description = @overview where platform_id = @platform_id and file_name = @file_name");
-                commandGameUpdate.Parameters.AddWithValue("@overview", overview);
-                commandGameUpdate.Parameters.AddWithValue("@file_name", game_fileName);
-                commandGameUpdate.Parameters.AddWithValue("@platform_id", platform_id);
-                db.sqlExecute(commandGameUpdate);
 
+                dbHandle.gameData updateItem = new dbHandle.gameData();
+
+                updateItem.file_name = game_fileName;
+                updateItem.platform_id = platform_id;
+                
+                if (game_node.Element("Overview") != null)
+                    updateItem.description = game_node.Element("Overview").Value;
+                if (game_node.Element("ReleaseDate") != null)
+                {
+                    string strReleaseDate = game_node.Element("ReleaseDate").Value;
+                    DateTime releaseDateDate;
+                    if (DateTime.TryParse(strReleaseDate, out releaseDateDate))
+                    {
+                        updateItem.release_year = releaseDateDate.Year;
+                    } 
+                }
+                if (game_node.Element("ESRB") != null)
+                    updateItem.rating = game_node.Element("ESRB").Value;
+                if (game_node.Element("Players") != null)
+                    updateItem.players = game_node.Element("Players").Value;
+                
+                if (game_node.Element("Co-op") != null)
+                {
+                    if (game_node.Element("Co-op").Value == "Yes")
+                        updateItem.co_op = true;
+                    else
+                        updateItem.co_op = false;
+                }
+                else
+                    updateItem.co_op = false;
+
+                if (game_node.Element("Publisher") != null)
+                    updateItem.publisher = game_node.Element("Publisher").Value;
+                if (game_node.Element("Developer") != null)
+                    updateItem.developer = game_node.Element("Developer").Value;
+                if (game_node.Element("Rating") != null)
+                    updateItem.gamedb_stars = Convert.ToDouble( game_node.Element("Rating").Value );
+
+                db.upsertGamesDataset(updateItem);
+
+                infoBox.AppendText(game_fileName + " checked on http://thegamesdb.net/ ID number " + gamedb_id + "\n", Color.WhiteSmoke);
             }
-                
+            dataGridGames.FirstDisplayedScrollingRowIndex = selectedrows;
+        }
 
 
+
+        private void btnGameAssets_Click(object sender, EventArgs e)
+        {
+            string imagesPath = txtImagesPath.Text.Replace("%PATH%", arcadiaPath);
+            foreach (DataGridViewRow r in dataGridGames.SelectedRows)
+            {
+                string game_fileName = r.Cells["file_name"].Value as string;
+                string gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
+
+                Game_ImageAssets game_assets = new Game_ImageAssets(platform_id, game_fileName, gamedb_id, imagesPath);
+
+                if (game_assets.ShowDialog() == DialogResult.OK)
+                {
+
+                }
             }
-
+        }
+        private void btnGamesSave_Click(object sender, EventArgs e)
+        {
+            db.saveGamesDataset();
         }
     }
+}
+        
+
+
 
 
 public static class RichTextBoxExtensions

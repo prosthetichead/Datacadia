@@ -64,15 +64,16 @@
             this.tabGames = new System.Windows.Forms.TabPage();
             this.panel8 = new System.Windows.Forms.Panel();
             this.dataGridGames = new System.Windows.Forms.DataGridView();
-            this.panel7 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cboxXMLInsert = new System.Windows.Forms.CheckBox();
-            this.cboxXMLUpdate = new System.Windows.Forms.CheckBox();
-            this.btnLoadFromHyperSpin = new System.Windows.Forms.Button();
-            this.btnLoadFromNoIntro = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnGamesSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnCheckAvalableRoms = new System.Windows.Forms.ToolStripButton();
+            this.btnXML = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnLoadFromHyperSpin = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnLoadFromNoIntro = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnGameOnGameDB = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnGameAssets = new System.Windows.Forms.ToolStripMenuItem();
             this.tabGenre = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -100,7 +101,6 @@
             this.cboxOnlyActive = new System.Windows.Forms.CheckBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.btnGameOnGameDB = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tabConnection.SuspendLayout();
             this.tabPlatforms.SuspendLayout();
@@ -111,7 +111,6 @@
             this.tabGames.SuspendLayout();
             this.panel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridGames)).BeginInit();
-            this.panel7.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabGenre.SuspendLayout();
             this.toolStripGenre.SuspendLayout();
@@ -468,7 +467,6 @@
             // tabGames
             // 
             this.tabGames.Controls.Add(this.panel8);
-            this.tabGames.Controls.Add(this.panel7);
             this.tabGames.Controls.Add(this.toolStrip1);
             this.tabGames.Location = new System.Drawing.Point(4, 26);
             this.tabGames.Name = "tabGames";
@@ -482,9 +480,9 @@
             // 
             this.panel8.Controls.Add(this.dataGridGames);
             this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel8.Location = new System.Drawing.Point(1, 75);
+            this.panel8.Location = new System.Drawing.Point(1, 26);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(719, 393);
+            this.panel8.Size = new System.Drawing.Size(719, 442);
             this.panel8.TabIndex = 25;
             // 
             // dataGridGames
@@ -500,80 +498,18 @@
             this.dataGridGames.Location = new System.Drawing.Point(0, 0);
             this.dataGridGames.Name = "dataGridGames";
             this.dataGridGames.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridGames.Size = new System.Drawing.Size(719, 393);
+            this.dataGridGames.Size = new System.Drawing.Size(719, 442);
             this.dataGridGames.TabIndex = 22;
             this.dataGridGames.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridGames_CellFormatting);
-            // 
-            // panel7
-            // 
-            this.panel7.Controls.Add(this.label8);
-            this.panel7.Controls.Add(this.cboxXMLInsert);
-            this.panel7.Controls.Add(this.cboxXMLUpdate);
-            this.panel7.Controls.Add(this.btnLoadFromHyperSpin);
-            this.panel7.Controls.Add(this.btnLoadFromNoIntro);
-            this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel7.Location = new System.Drawing.Point(1, 26);
-            this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(719, 49);
-            this.panel7.TabIndex = 24;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.ForeColor = System.Drawing.Color.Red;
-            this.label8.Location = new System.Drawing.Point(158, 29);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(208, 13);
-            this.label8.TabIndex = 19;
-            this.label8.Text = "Recomend you do not insert from both";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cboxXMLInsert
-            // 
-            this.cboxXMLInsert.AutoSize = true;
-            this.cboxXMLInsert.Location = new System.Drawing.Point(3, 9);
-            this.cboxXMLInsert.Name = "cboxXMLInsert";
-            this.cboxXMLInsert.Size = new System.Drawing.Size(55, 17);
-            this.cboxXMLInsert.TabIndex = 15;
-            this.cboxXMLInsert.Text = "Insert";
-            this.cboxXMLInsert.UseVisualStyleBackColor = true;
-            // 
-            // cboxXMLUpdate
-            // 
-            this.cboxXMLUpdate.AutoSize = true;
-            this.cboxXMLUpdate.Location = new System.Drawing.Point(64, 9);
-            this.cboxXMLUpdate.Name = "cboxXMLUpdate";
-            this.cboxXMLUpdate.Size = new System.Drawing.Size(63, 17);
-            this.cboxXMLUpdate.TabIndex = 16;
-            this.cboxXMLUpdate.Text = "update";
-            this.cboxXMLUpdate.UseVisualStyleBackColor = true;
-            // 
-            // btnLoadFromHyperSpin
-            // 
-            this.btnLoadFromHyperSpin.Location = new System.Drawing.Point(264, 3);
-            this.btnLoadFromHyperSpin.Name = "btnLoadFromHyperSpin";
-            this.btnLoadFromHyperSpin.Size = new System.Drawing.Size(125, 23);
-            this.btnLoadFromHyperSpin.TabIndex = 17;
-            this.btnLoadFromHyperSpin.Text = "Load Hyperspin XML";
-            this.btnLoadFromHyperSpin.UseVisualStyleBackColor = true;
-            this.btnLoadFromHyperSpin.Click += new System.EventHandler(this.btnLoadFromHyperSpin_Click);
-            // 
-            // btnLoadFromNoIntro
-            // 
-            this.btnLoadFromNoIntro.Location = new System.Drawing.Point(133, 3);
-            this.btnLoadFromNoIntro.Name = "btnLoadFromNoIntro";
-            this.btnLoadFromNoIntro.Size = new System.Drawing.Size(125, 23);
-            this.btnLoadFromNoIntro.TabIndex = 14;
-            this.btnLoadFromNoIntro.Text = "Load No-Intro XML";
-            this.btnLoadFromNoIntro.UseVisualStyleBackColor = true;
-            this.btnLoadFromNoIntro.Click += new System.EventHandler(this.btnLoadFromNoIntro_Click);
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnGamesSave,
+            this.toolStripSeparator1,
             this.btnCheckAvalableRoms,
-            this.btnGameOnGameDB});
+            this.btnXML,
+            this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(1, 1);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(719, 25);
@@ -589,6 +525,11 @@
             this.btnGamesSave.Text = "Save";
             this.btnGamesSave.Click += new System.EventHandler(this.btnGamesSave_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // btnCheckAvalableRoms
             // 
             this.btnCheckAvalableRoms.Image = ((System.Drawing.Image)(resources.GetObject("btnCheckAvalableRoms.Image")));
@@ -597,6 +538,58 @@
             this.btnCheckAvalableRoms.Size = new System.Drawing.Size(141, 22);
             this.btnCheckAvalableRoms.Text = "Check Avalable Roms";
             this.btnCheckAvalableRoms.Click += new System.EventHandler(this.btnCheckAvalableRoms_Click);
+            // 
+            // btnXML
+            // 
+            this.btnXML.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnXML.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnLoadFromHyperSpin,
+            this.btnLoadFromNoIntro});
+            this.btnXML.Image = ((System.Drawing.Image)(resources.GetObject("btnXML.Image")));
+            this.btnXML.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnXML.Name = "btnXML";
+            this.btnXML.Size = new System.Drawing.Size(122, 22);
+            this.btnXML.Text = "XML Loading Tools";
+            // 
+            // btnLoadFromHyperSpin
+            // 
+            this.btnLoadFromHyperSpin.Name = "btnLoadFromHyperSpin";
+            this.btnLoadFromHyperSpin.Size = new System.Drawing.Size(213, 22);
+            this.btnLoadFromHyperSpin.Text = "Load from Hyperspin XML";
+            this.btnLoadFromHyperSpin.Click += new System.EventHandler(this.btnLoadFromHyperSpin_Click);
+            // 
+            // btnLoadFromNoIntro
+            // 
+            this.btnLoadFromNoIntro.Name = "btnLoadFromNoIntro";
+            this.btnLoadFromNoIntro.Size = new System.Drawing.Size(213, 22);
+            this.btnLoadFromNoIntro.Text = "Load from No-Intro XML";
+            this.btnLoadFromNoIntro.Click += new System.EventHandler(this.btnLoadFromNoIntro_Click);
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnGameOnGameDB,
+            this.btnGameAssets});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(140, 22);
+            this.toolStripDropDownButton1.Text = "theGamesDB.net Tools";
+            // 
+            // btnGameOnGameDB
+            // 
+            this.btnGameOnGameDB.Name = "btnGameOnGameDB";
+            this.btnGameOnGameDB.Size = new System.Drawing.Size(226, 22);
+            this.btnGameOnGameDB.Text = "Get data for selected";
+            this.btnGameOnGameDB.Click += new System.EventHandler(this.btnGameOnGameDB_Click);
+            // 
+            // btnGameAssets
+            // 
+            this.btnGameAssets.Name = "btnGameAssets";
+            this.btnGameAssets.Size = new System.Drawing.Size(226, 22);
+            this.btnGameAssets.Text = "Get image assets for selected";
+            this.btnGameAssets.Click += new System.EventHandler(this.btnGameAssets_Click);
             // 
             // tabGenre
             // 
@@ -873,15 +866,6 @@
             this.panel5.Size = new System.Drawing.Size(729, 499);
             this.panel5.TabIndex = 25;
             // 
-            // btnGameOnGameDB
-            // 
-            this.btnGameOnGameDB.Image = ((System.Drawing.Image)(resources.GetObject("btnGameOnGameDB.Image")));
-            this.btnGameOnGameDB.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnGameOnGameDB.Name = "btnGameOnGameDB";
-            this.btnGameOnGameDB.Size = new System.Drawing.Size(126, 22);
-            this.btnGameOnGameDB.Text = "Check on GameDB";
-            this.btnGameOnGameDB.Click += new System.EventHandler(this.btnGameOnGameDB_Click);
-            // 
             // datacadia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -916,8 +900,6 @@
             this.tabGames.PerformLayout();
             this.panel8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridGames)).EndInit();
-            this.panel7.ResumeLayout(false);
-            this.panel7.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tabGenre.ResumeLayout(false);
@@ -975,11 +957,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtEmuPath;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button btnLoadFromHyperSpin;
-        private System.Windows.Forms.CheckBox cboxXMLUpdate;
-        private System.Windows.Forms.CheckBox cboxXMLInsert;
-        private System.Windows.Forms.Button btnLoadFromNoIntro;
         private System.Windows.Forms.ListBox listboxPlatforms;
         private System.Windows.Forms.Splitter splitter2;
         private System.Windows.Forms.DataGridView dataGridGames;
@@ -1006,7 +983,6 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btnGamesSave;
         private System.Windows.Forms.Panel panel8;
-        private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.ToolStripButton btnCheckAvalableRoms;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox cboxPlatformIcon;
@@ -1016,7 +992,13 @@
         private System.Windows.Forms.ToolStrip toolStripAssets;
         private System.Windows.Forms.ToolStripButton btnAssetsSave;
         private System.Windows.Forms.ToolStripButton btnAssetsRefresh;
-        private System.Windows.Forms.ToolStripButton btnGameOnGameDB;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem btnGameOnGameDB;
+        private System.Windows.Forms.ToolStripMenuItem btnGameAssets;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripDropDownButton btnXML;
+        private System.Windows.Forms.ToolStripMenuItem btnLoadFromHyperSpin;
+        private System.Windows.Forms.ToolStripMenuItem btnLoadFromNoIntro;
 
     }
 }

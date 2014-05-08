@@ -18,7 +18,7 @@ namespace Datacadia
         string searchString;
         string platform_id;
 
-        public long ReturnedID { get; set; } 
+        public string ReturnedID { get; set; } 
 
         public GameDB_Search(string searchString, string platform_id, string gameName)
         {
@@ -60,7 +60,7 @@ namespace Datacadia
         private void btnOK_Click(object sender, EventArgs e)
         {
             string value = listBoxGamesDBResults.SelectedValue as string;
-            ReturnedID = Convert.ToInt64(value);
+            ReturnedID = value;
             Debug.WriteLine(ReturnedID);
             this.DialogResult = DialogResult.OK;
         }
