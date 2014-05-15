@@ -87,6 +87,10 @@
             this.toolStripAssets = new System.Windows.Forms.ToolStrip();
             this.btnAssetsSave = new System.Windows.Forms.ToolStripButton();
             this.btnAssetsRefresh = new System.Windows.Forms.ToolStripButton();
+            this.TabFilters = new System.Windows.Forms.TabPage();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.comboBoxFilters = new System.Windows.Forms.ToolStripComboBox();
+            this.btnFilterSave = new System.Windows.Forms.ToolStripButton();
             this.infoBox = new System.Windows.Forms.RichTextBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -101,6 +105,11 @@
             this.cboxOnlyActive = new System.Windows.Forms.CheckBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.btnSaveAs = new System.Windows.Forms.ToolStripButton();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabConnection.SuspendLayout();
             this.tabPlatforms.SuspendLayout();
@@ -118,6 +127,8 @@
             this.panel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridAssets)).BeginInit();
             this.toolStripAssets.SuspendLayout();
+            this.TabFilters.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -132,6 +143,7 @@
             this.tabControl1.Controls.Add(this.tabGames);
             this.tabControl1.Controls.Add(this.tabGenre);
             this.tabControl1.Controls.Add(this.tabIcons);
+            this.tabControl1.Controls.Add(this.TabFilters);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.ImeMode = System.Windows.Forms.ImeMode.AlphaFull;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -728,6 +740,48 @@
             this.btnAssetsRefresh.Size = new System.Drawing.Size(66, 22);
             this.btnAssetsRefresh.Text = "Refresh";
             // 
+            // TabFilters
+            // 
+            this.TabFilters.Controls.Add(this.btnRemove);
+            this.TabFilters.Controls.Add(this.textBox1);
+            this.TabFilters.Controls.Add(this.comboBox2);
+            this.TabFilters.Controls.Add(this.comboBox1);
+            this.TabFilters.Controls.Add(this.toolStrip2);
+            this.TabFilters.Location = new System.Drawing.Point(4, 26);
+            this.TabFilters.Name = "TabFilters";
+            this.TabFilters.Padding = new System.Windows.Forms.Padding(3);
+            this.TabFilters.Size = new System.Drawing.Size(721, 469);
+            this.TabFilters.TabIndex = 5;
+            this.TabFilters.Text = "Filters";
+            this.TabFilters.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.comboBoxFilters,
+            this.btnFilterSave,
+            this.btnSaveAs});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(715, 25);
+            this.toolStrip2.TabIndex = 1;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // comboBoxFilters
+            // 
+            this.comboBoxFilters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBoxFilters.Name = "comboBoxFilters";
+            this.comboBoxFilters.Size = new System.Drawing.Size(121, 25);
+            // 
+            // btnFilterSave
+            // 
+            this.btnFilterSave.Image = ((System.Drawing.Image)(resources.GetObject("btnFilterSave.Image")));
+            this.btnFilterSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnFilterSave.Name = "btnFilterSave";
+            this.btnFilterSave.Size = new System.Drawing.Size(51, 22);
+            this.btnFilterSave.Text = "Save";
+            // 
             // infoBox
             // 
             this.infoBox.BackColor = System.Drawing.Color.Black;
@@ -866,6 +920,46 @@
             this.panel5.Size = new System.Drawing.Size(729, 499);
             this.panel5.TabIndex = 25;
             // 
+            // btnSaveAs
+            // 
+            this.btnSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveAs.Image")));
+            this.btnSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSaveAs.Name = "btnSaveAs";
+            this.btnSaveAs.Size = new System.Drawing.Size(67, 22);
+            this.btnSaveAs.Text = "Save As";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(25, 121);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 2;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(280, 121);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(121, 21);
+            this.comboBox2.TabIndex = 3;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(435, 121);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(200, 22);
+            this.textBox1.TabIndex = 4;
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(575, 189);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(36, 23);
+            this.btnRemove.TabIndex = 5;
+            this.btnRemove.Text = "X";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            // 
             // datacadia
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -912,6 +1006,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridAssets)).EndInit();
             this.toolStripAssets.ResumeLayout(false);
             this.toolStripAssets.PerformLayout();
+            this.TabFilters.ResumeLayout(false);
+            this.TabFilters.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.menuStrip.ResumeLayout(false);
@@ -999,6 +1097,15 @@
         private System.Windows.Forms.ToolStripDropDownButton btnXML;
         private System.Windows.Forms.ToolStripMenuItem btnLoadFromHyperSpin;
         private System.Windows.Forms.ToolStripMenuItem btnLoadFromNoIntro;
+        private System.Windows.Forms.TabPage TabFilters;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripComboBox comboBoxFilters;
+        private System.Windows.Forms.ToolStripButton btnFilterSave;
+        private System.Windows.Forms.ToolStripButton btnSaveAs;
+        private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox comboBox1;
 
     }
 }
