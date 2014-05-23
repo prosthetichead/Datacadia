@@ -28,7 +28,7 @@ namespace Datacadia
            public string game_load_string;
            public string name;
            public string description;
-           public string region;
+           public string region_id;
            public long release_year;
            public string rating;
            public string players;
@@ -118,8 +118,8 @@ namespace Datacadia
                     gameRow[0]["name"] = updateData.name;
                 if (updateData.description != null)
                     gameRow[0]["description"] = updateData.description;
-                if (updateData.region != null)
-                    gameRow[0]["region"] = updateData.region;
+                if (updateData.region_id != null)
+                    gameRow[0]["region_id"] = updateData.region_id;
                 if (updateData.release_year >= 0)
                     gameRow[0]["release_year"] = updateData.release_year;
                 if (updateData.rating != null)
@@ -183,10 +183,10 @@ namespace Datacadia
                 else
                     newRow["description"] = "";
 
-                if (updateData.region != null)
-                    newRow["region"] = updateData.region;
+                if (updateData.region_id != null)
+                    newRow["region_id"] = updateData.region_id;
                 else
-                    newRow["region"] = "";
+                    newRow["region_id"] = "NONE";
 
                 if (updateData.release_year > 0)
                     newRow["release_year"] = updateData.release_year;
@@ -230,10 +230,18 @@ namespace Datacadia
 
                 if (updateData.active != null)
                     newRow["active"] = updateData.active;
+                else
+                    newRow["active"] = 0;
+
                 if (updateData.favourite != null)
                     newRow["favourite"] = updateData.favourite;
+                else
+                    newRow["favourite"] = 0;
+
                 if (updateData.co_op != null)
                     newRow["co_op"] = updateData.co_op;
+                else
+                    newRow["co_op"] = 0;
 
 
                 if (updateData.clone_of != null)
@@ -315,6 +323,29 @@ namespace Datacadia
             else
                 genre_id = 0;
             return genre_id.GetValueOrDefault();
+        }
+
+        public long getRegionID(string region)
+        {
+            long? region_id = 0;
+
+            var command = conn.CreateCommand();
+            command.CommandText = "SELECT id from regions where name = @region_name or alt_names like @region_name_like";
+            command.Parameters.AddWithValue("@region_name", region);
+            command.Parameters.AddWithValue("@region_name_like", "%\"" + region + "\"%");
+
+            SQLiteDataReader reader = command.ExecuteReader();
+
+            reader.Read();
+            if (reader.HasRows)
+            {
+                region_id = reader[0] as long?;
+                if (region_id == null)
+                    region_id = 0;
+            }
+            else
+                region_id = 0;
+            return region_id.GetValueOrDefault();
         }
 
         public void sqlExecute(SQLiteCommand command)

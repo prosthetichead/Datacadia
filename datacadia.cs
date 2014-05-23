@@ -140,7 +140,7 @@ namespace Datacadia
         }
         public void refreshAssetsDataSet()
         {
-            assetsDataSet = db.getDataSet("select * from assets");
+            assetsDataSet = db.getDataSet("select * from image_assets");
             dataGridAssets.DataSource = assetsDataSet.Tables[0];
 
 
@@ -233,6 +233,7 @@ namespace Datacadia
                 }
             }
         }
+
         private void btnLoadFromHyperSpin_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -289,7 +290,7 @@ namespace Datacadia
             string icon_id = ds.Tables[0].Rows[0].Field<string>("icon_id");
             if (icon_id == null)
                 icon_id = "ERROR";
-            DataSet ds_icons = db.getDataSet("select * from assets where type = 'image' order by name");
+            DataSet ds_icons = db.getDataSet("select * from image_assets where type = 'icon' order by name");
             cboxPlatformIcon.DisplayMember = "name";
             cboxPlatformIcon.ValueMember = "id";
             cboxPlatformIcon.DataSource = ds_icons.Tables[0];
@@ -445,11 +446,11 @@ namespace Datacadia
                         continue;
                     }
                     // Write new gamedb_id to table
-                    var command = new SQLiteCommand("update games set gamedb_id = @gamedb_id where platform_id = @platform_id and file_name = @file_name");
-                    command.Parameters.AddWithValue("@gamedb_id", gamedb_id);
-                    command.Parameters.AddWithValue("@file_name", game_fileName);
-                    command.Parameters.AddWithValue("@platform_id", platform_id);
-                    db.sqlExecute(command);
+                   // var command = new SQLiteCommand("update games set gamedb_id = @gamedb_id where platform_id = @platform_id and file_name = @file_name");
+                   // command.Parameters.AddWithValue("@gamedb_id", gamedb_id);
+                   // command.Parameters.AddWithValue("@file_name", game_fileName);
+                   // command.Parameters.AddWithValue("@platform_id", platform_id);
+                   // db.sqlExecute(command);
                 }
 
 
@@ -464,6 +465,7 @@ namespace Datacadia
 
                 updateItem.file_name = game_fileName;
                 updateItem.platform_id = platform_id;
+                updateItem.gamedb_id = gamedb_id;
                 
                 if (game_node.Element("Overview") != null)
                     updateItem.description = game_node.Element("Overview").Value;
