@@ -19,30 +19,6 @@ namespace Datacadia
         SQLiteConnection conn;
         public DataSet dsGames;
         SQLiteDataAdapter daGames;
-        public struct gameData{
-           public long platform_id;
-           public string file_name;
-           public string gamedb_id;
-           public long genre_id;
-           public string crc;
-           public string game_load_string;
-           public string name;
-           public string description;
-           public string region_id;
-           public long release_year;
-           public string rating;
-           public string players;
-           public bool? co_op;
-           public string publisher;
-           public string developer;
-           public double users_stars;
-           public double gamedb_stars;
-           public string control_type;
-           public bool? active;
-           public bool? favourite;
-           public string clone_of;
-        }
-
 
         public dbHandle()
         {
@@ -100,49 +76,78 @@ namespace Datacadia
             }
         }
 
-        public void upsertGamesDataset(gameData updateData)
+        public void upsertGamesDataset(GameDataItem updateData)
         {
             DataRow[] gameRow = dsGames.Tables[0].Select(String.Format(@"file_name = '{0}'", updateData.file_name.Replace("'", "''"))); //Get the current row that we are going to edit.
 
             if (gameRow.Count() > 0) // this row already exists in the dataset, update it to our new values
             {
-                if (updateData.gamedb_id != null)
+                if (updateData.gamedb_id != -1)
                     gameRow[0]["gamedb_id"] = updateData.gamedb_id;
+                
                 if (updateData.genre_id >= 0)
                     gameRow[0]["genre_id"] = updateData.genre_id;
-                if (updateData.crc != null)
+                
+                if (updateData.crc != "NULL")
                     gameRow[0]["crc"] = updateData.genre_id;
-                if (updateData.game_load_string != null)
+                
+                if (updateData.game_load_string != "NULL")
                     gameRow[0]["game_load_string"] = updateData.game_load_string;
-                if (updateData.name != null)
+                
+                if (updateData.name != "NULL")
                     gameRow[0]["name"] = updateData.name;
-                if (updateData.description != null)
+                
+                if (updateData.description != "NULL")
                     gameRow[0]["description"] = updateData.description;
-                if (updateData.region_id != null)
+                
+                if (updateData.region_id != "NULL")
                     gameRow[0]["region_id"] = updateData.region_id;
+                
                 if (updateData.release_year >= 0)
                     gameRow[0]["release_year"] = updateData.release_year;
-                if (updateData.rating != null)
+                
+                if (updateData.rating != "NULL")
                     gameRow[0]["rating"] = updateData.rating;
-                if (updateData.players != null)
-                    gameRow[0]["players"] = updateData.players;
-                if (updateData.co_op != null)
+
+                if (updateData.players != "NULL")
+                {
+                    if (updateData.players == "4+")
+                        gameRow[0]["players"] = 4;
+                    else
+                        gameRow[0]["players"] = updateData.players;
+                }
+                
+                if (updateData.co_op == 0 || updateData.co_op == 1)
                     gameRow[0]["co_op"] = updateData.co_op;
-                if (updateData.publisher != null)
+                
+                if (updateData.publisher != "NULL")
                     gameRow[0]["publisher"] = updateData.publisher;
-                if (updateData.developer != null)
+                
+                if (updateData.publisher_id >= 0)
+                    gameRow[0]["publisher_id"] = updateData.publisher_id;
+                
+                if (updateData.developer != "NULL")
                     gameRow[0]["developer"] = updateData.developer;
+                
+                if (updateData.developer_id >= 0)
+                    gameRow[0]["developer_id"] = updateData.developer_id;
+
                 if (updateData.users_stars >= 0)
                     gameRow[0]["users_stars"] = updateData.users_stars;
+
                 if (updateData.gamedb_stars >= 0)
                     gameRow[0]["gamedb_stars"] = updateData.gamedb_stars;
-                if (updateData.control_type != null)
+
+                if (updateData.control_type != "NULL")
                     gameRow[0]["control_type"] = updateData.control_type;
-                if (updateData.active != null)
+
+                if (updateData.active == 0 || updateData.active == 1)
                     gameRow[0]["active"] = updateData.active;
-                if (updateData.favourite != null)
+
+                if (updateData.favourite == 0 || updateData.favourite == 1)
                     gameRow[0]["favourite"] = updateData.favourite;
-                if (updateData.clone_of != null)
+
+                if (updateData.clone_of != "NULL")
                     gameRow[0]["clone_of"] = updateData.clone_of;
             }
             else // this is a whole new row, add it to the ds
@@ -153,65 +158,76 @@ namespace Datacadia
                 newRow["platform_id"] = updateData.platform_id;
 
 
-                if (updateData.gamedb_id != null)
+                if (updateData.gamedb_id != -1)
                     newRow["gamedb_id"] = updateData.gamedb_id;
                 else
                     newRow["gamedb_id"] = 0;
 
-                if (updateData.genre_id > 0)
+                if (updateData.genre_id >= 0)
                     newRow["genre_id"] = updateData.genre_id;
                 else
                     newRow["genre_id"] = 0;
                 
-                if (updateData.crc != null)
+                if (updateData.crc != "NULL")
                     newRow["crc"] = updateData.crc;
                 else
-                    newRow["crc"] = "";
+                    newRow["crc"] = "NONE";
 
-                if (updateData.game_load_string != null)
+                if (updateData.game_load_string != "NULL")
                     newRow["game_load_string"] = updateData.game_load_string;
                 else
                     newRow["game_load_string"] = "";
 
-                if (updateData.name != null)
+                if (updateData.name != "NULL")
                     newRow["name"] = updateData.name;
                 else
-                    newRow["name"] = "";
+                    newRow["name"] = "No Name Entered";
 
-                if (updateData.description != null)
+                if (updateData.description != "NULL")
                     newRow["description"] = updateData.description;
                 else
                     newRow["description"] = "";
 
-                if (updateData.region_id != null)
+                if (updateData.region_id != "NULL")
                     newRow["region_id"] = updateData.region_id;
                 else
                     newRow["region_id"] = "NONE";
 
-                if (updateData.release_year > 0)
+                if (updateData.release_year >= 0)
                     newRow["release_year"] = updateData.release_year;
                 else
                     newRow["release_year"] = 0;
 
-                if (updateData.rating != null)
+                if (updateData.rating != "NULL")
                     newRow["rating"] = updateData.rating;
                 else
                     newRow["rating"] = "";
 
-                if (updateData.players != null)
+                if (updateData.players != "NULL")
                     newRow["players"] = updateData.players;
                 else
-                    newRow["players"] = "";
-                
-                if (updateData.publisher != null)
+                    newRow["players"] = 0;
+
+
+                if (updateData.publisher != "NULL")
                     newRow["publisher"] = updateData.publisher;
                 else
                     newRow["publisher"] = "";
 
-                if (updateData.developer != null)
+                if (updateData.publisher_id >= 0)
+                    newRow["publisher_id"] = updateData.publisher_id;
+                else
+                    newRow["publisher_id"] = 0;
+
+                if (updateData.developer != "NULL")
                     newRow["developer"] = updateData.developer;
                 else
                     newRow["developer"] = "";
+
+                if (updateData.developer_id >= 0)
+                    newRow["developer_id"] = updateData.developer_id;
+                else
+                    newRow["developer_id"] = 0;
 
                 if (updateData.users_stars >= 0)
                     newRow["users_stars"] = updateData.users_stars;
@@ -223,31 +239,31 @@ namespace Datacadia
                 else
                     newRow["gamedb_stars"] = 0;
 
-                if (updateData.control_type != null)
+                if (updateData.control_type != "NULL")
                     newRow["control_type"] = updateData.control_type;
                 else
                     newRow["control_type"] = "";
 
-                if (updateData.active != null)
+                if (updateData.active == 0 || updateData.active == 1)
                     newRow["active"] = updateData.active;
                 else
                     newRow["active"] = 0;
 
-                if (updateData.favourite != null)
+                if (updateData.favourite == 0 || updateData.favourite == 1)
                     newRow["favourite"] = updateData.favourite;
                 else
                     newRow["favourite"] = 0;
 
-                if (updateData.co_op != null)
+                if (updateData.co_op == 0 || updateData.co_op == 1)
                     newRow["co_op"] = updateData.co_op;
                 else
                     newRow["co_op"] = 0;
 
 
-                if (updateData.clone_of != null)
+                if (updateData.clone_of != "NULL")
                     newRow["clone_of"] = updateData.clone_of;
                 else
-                    newRow["clone_of"] = "none";
+                    newRow["clone_of"] = "NONE";
 
                 dsGames.Tables[0].Rows.Add(newRow);
             }
@@ -325,9 +341,9 @@ namespace Datacadia
             return genre_id.GetValueOrDefault();
         }
 
-        public long getRegionID(string region)
+        public string getRegionID(string region)
         {
-            long? region_id = 0;
+            string region_id = "NONE";
 
             var command = conn.CreateCommand();
             command.CommandText = "SELECT id from regions where name = @region_name or alt_names like @region_name_like";
@@ -339,13 +355,13 @@ namespace Datacadia
             reader.Read();
             if (reader.HasRows)
             {
-                region_id = reader[0] as long?;
+                region_id = reader[0] as string;
                 if (region_id == null)
-                    region_id = 0;
+                    region_id = "NONE";
             }
             else
-                region_id = 0;
-            return region_id.GetValueOrDefault();
+                region_id = "NONE";
+            return region_id;
         }
 
         public void sqlExecute(SQLiteCommand command)
@@ -362,9 +378,9 @@ namespace Datacadia
             }
         }
 
-        public string getGameDB_ID(long? platform_id, string file_name)
+        public long getGameDB_ID(long? platform_id, string file_name)
         {
-            string gamedb_id= "0";
+            long? gamedb_id= 0;
             
             try
             {
@@ -377,14 +393,14 @@ namespace Datacadia
                 reader.Read();
                 if (reader.HasRows)
                 {
-                    gamedb_id = reader[0] as string;
-                    if (gamedb_id == "" || gamedb_id == null)
+                    gamedb_id = reader[0] as long?;
+                    if (gamedb_id == null)
                     {
-                        gamedb_id = "0";
+                        gamedb_id = 0;
                     }
                 }
 
-                return gamedb_id;
+                return gamedb_id.GetValueOrDefault();
             }
             catch (Exception e)
             {

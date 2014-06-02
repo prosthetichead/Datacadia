@@ -18,7 +18,7 @@ namespace Datacadia
     {
         long platform_id;
         string game_file_name;
-        string gamedb_id;
+        long gamedb_id;
         string images_path;
 
         string imageType;
@@ -27,7 +27,7 @@ namespace Datacadia
         string baseImgURL;
         XDocument xmlDoc;
         
-        public Game_ImageAssets(long platform_id, string game_file_name, string gamedb_id, string images_path)
+        public Game_ImageAssets(long platform_id, string game_file_name, long gamedb_id, string images_path)
         {
             this.platform_id = platform_id;
             this.game_file_name = game_file_name;

@@ -221,12 +221,12 @@ namespace Datacadia
                     if (game_node.Element("release") != null)
                     {
                         release_name = game_node.Element("release").Attribute("name").Value;
-                        region = game_node.Element("release").Attribute("region").Value;
+                        region = db.getRegionID(game_node.Element("release").Attribute("region").Value);
                     }
                     else
                     {
                         release_name = file_name;
-                        region = "No_Release";
+                        region = "NONE";
                     }
 
 
@@ -248,15 +248,13 @@ namespace Datacadia
 
                 foreach (XElement game_node in xmlDoc.Descendants("game"))
                 {
-                    dbHandle.gameData newItem = new dbHandle.gameData();
-                    newItem.platform_id = platform_id;
+                    GameDataItem newItem = new GameDataItem(platform_id, game_node.Attribute("name").Value);
 
                     if (game_node.Element("crc") != null)
                         newItem.crc = game_node.Element("crc").Value;
                     else
                         newItem.crc = "";
 
-                    newItem.file_name = game_node.Attribute("name").Value;
                     newItem.name = game_node.Element("description").Value;
                     newItem.developer = game_node.Element("manufacturer").Value;
                     newItem.rating = game_node.Element("rating").Value;
@@ -414,7 +412,7 @@ namespace Datacadia
         }
         private void btnAssetsSave_Click(object sender, EventArgs e)
         {
-            db.SaveDataTable(assetsDataSet, "assets");
+            db.SaveDataTable(assetsDataSet, "select * from image_assets");
             assetsDataSet.AcceptChanges();
         }
         
@@ -429,9 +427,9 @@ namespace Datacadia
             {
                 string game_fileName = r.Cells["file_name"].Value as string;
                 string game_name = r.Cells["name"].Value as string;
-                string gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
+                long gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
 
-                if (gamedb_id == "0")
+                if (gamedb_id == 0)
                 {
 
                     string searchString = Regex.Replace(game_name, "(\\[.*\\])|(\\(.*\\))", ""); /// Remove all the text between square and round brackets
@@ -439,7 +437,7 @@ namespace Datacadia
 
                     if (gameDB_Search.ShowDialog() == DialogResult.OK)
                     {
-                        gamedb_id = gameDB_Search.ReturnedID;
+                        gamedb_id = Convert.ToInt64( gameDB_Search.ReturnedID );
                     }
                     else
                     {
@@ -461,11 +459,8 @@ namespace Datacadia
                 XDocument xmlDoc = XDocument.Load(stringReader);
                 XElement game_node = xmlDoc.Descendants("Game").First();
 
-                dbHandle.gameData updateItem = new dbHandle.gameData();
-
-                updateItem.file_name = game_fileName;
-                updateItem.platform_id = platform_id;
-                updateItem.gamedb_id = gamedb_id;
+                GameDataItem updateItem = new GameDataItem(platform_id, game_fileName);
+                updateItem.gamedb_id = Convert.ToInt64(gamedb_id);
                 
                 if (game_node.Element("Overview") != null)
                     updateItem.description = game_node.Element("Overview").Value;
@@ -486,12 +481,12 @@ namespace Datacadia
                 if (game_node.Element("Co-op") != null)
                 {
                     if (game_node.Element("Co-op").Value == "Yes")
-                        updateItem.co_op = true;
+                        updateItem.co_op = 1;
                     else
-                        updateItem.co_op = false;
+                        updateItem.co_op = 0;
                 }
                 else
-                    updateItem.co_op = false;
+                    updateItem.co_op = 0;
 
                 if (game_node.Element("Publisher") != null)
                     updateItem.publisher = game_node.Element("Publisher").Value;
@@ -501,6 +496,7 @@ namespace Datacadia
                     updateItem.gamedb_stars = Convert.ToDouble( game_node.Element("Rating").Value );
 
                 db.upsertGamesDataset(updateItem);
+
 
                 infoBox.AppendText(game_fileName + " checked on http://thegamesdb.net/ ID number " + gamedb_id + "\n", Color.WhiteSmoke);
             }
@@ -515,7 +511,7 @@ namespace Datacadia
             foreach (DataGridViewRow r in dataGridGames.SelectedRows)
             {
                 string game_fileName = r.Cells["file_name"].Value as string;
-                string gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
+                long gamedb_id = db.getGameDB_ID(platform_id, game_fileName);
 
                 Game_ImageAssets game_assets = new Game_ImageAssets(platform_id, game_fileName, gamedb_id, imagesPath);
 

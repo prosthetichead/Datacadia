@@ -95,6 +95,7 @@
       <DependentUpon>datacadia.cs</DependentUpon>
     </Compile>
     <Compile Include="dbHandle.cs" />
+    <Compile Include="GameDataItem.cs" />
     <Compile Include="GameDB_Search.cs">
       <SubType>Form</SubType>
     </Compile>
